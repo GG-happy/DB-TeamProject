@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -47,10 +49,24 @@ public class SecurityConfiguration {
         // @formatter:off
         http
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/admin-home").hasRole("ADMIN") // "/admin-home" 경로는 ADMIN 권한만 접근 가능
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
-                .formLogin(withDefaults());
+                .formLogin((formLogin) -> formLogin
+                        .defaultSuccessUrl("/client-home", true) // 기본적으로 모든 사용자 성공 시 리디렉션
+                        .successHandler((request, response, authentication) -> {
+                            // 권한에 따라 리디렉션 처리
+                            if (authentication.getAuthorities().stream()
+                                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+                                response.sendRedirect("/admin-home");
+                            } else {
+                                response.sendRedirect("/client-home");
+                            }
+                        })
+                        .permitAll()
+
+                );
         // @formatter:on
         return http.build();
     }
