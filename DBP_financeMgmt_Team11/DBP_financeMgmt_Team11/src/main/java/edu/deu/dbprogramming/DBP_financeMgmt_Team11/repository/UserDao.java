@@ -1,4 +1,4 @@
-package edu.deu.dbprogramming.DBP_financeMgmt_Team11;
+package edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
