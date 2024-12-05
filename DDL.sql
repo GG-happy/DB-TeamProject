@@ -2,134 +2,139 @@
 /* ########  ID : Team ######## */
 ---------------------------------------------------------------
 ----------------------
-/* DDL Å×ÀÌºí »ı¼º   */
+/* DDL í…Œì´ë¸” ìƒì„±   */
 ----------------------
--- 1. ±â¾÷Á¤º¸
+-- 1. ê¸°ì—…ì •ë³´
 CREATE TABLE Company (
-	company_id      VARCHAR2(20)	PRIMARY KEY,   --±â¾÷ÄÚµå(PK)
-	business_no     VARCHAR2(30)	NOT NULL,      -- »ç¾÷Àå µî·Ï¹øÈ£
-	company_name    VARCHAR2(100)   NOT NULL,      -- ±â¾÷¸í
-	company_size    VARCHAR2(50),                  -- ±â¾÷ ±Ô¸ğ
-	credit_grade    VARCHAR2(10)                   -- ½Å¿ëµî±Ş
+	company_id      VARCHAR2(20)	PRIMARY KEY,   --ê¸°ì—…ì½”ë“œ(PK)
+	business_no     VARCHAR2(30)	NOT NULL,      -- ì‚¬ì—…ì¥ ë“±ë¡ë²ˆí˜¸
+	company_name    VARCHAR2(100)   NOT NULL,      -- ê¸°ì—…ëª…
+	company_size    VARCHAR2(50),                  -- ê¸°ì—… ê·œëª¨
+	credit_grade    VARCHAR2(10)    DEFAULT 'A'    -- ì‹ ìš©ë“±ê¸‰
 );
 
--- 2. Àç¹«Á¦Ç¥
+-- ALTER TABLE Company MODIFY credit_grade DEFAULT 'A';
+
+-- 2. ì¬ë¬´ì œí‘œ
 CREATE TABLE FinancialStatement(
-    satement_id     VARCHAR2(20)	 PRIMARY KEY,   -- Àç¹«Á¦Ç¥ÄÚµå(PK)
-    quarter         VARCHAR2(20)	 NOT NULL,      -- ºĞ±â
-    annual_revenue  NUMBER,                         -- ¿¬¸ÅÃâ
-    debt_amount     NUMBER,                         -- ºÎÃ¤±İ¾×
-    net_profit      NUMBER,                         -- ¼øÀÌÀÍ
-    total_assets    NUMBER,                         -- ÃÑ ÀÚ»ê
-    current_assets  NUMBER,                         -- À¯µ¿ÀÚ»ê
-    fixed_assets    NUMBER,                         -- °íÁ¤ÀÚ»ê
-    total_cost      NUMBER,                         -- ÃÑºñ¿ë
-    company_id      VARCHAR2(20)     NOT NULL,      -- ±â¾÷ÄÚµå(FK)
+    satement_id     VARCHAR2(20)	 PRIMARY KEY,   -- ì¬ë¬´ì œí‘œì½”ë“œ(PK)
+    quarter         VARCHAR2(20)	 NOT NULL,      -- ë¶„ê¸°
+    annual_revenue  NUMBER,                         -- ì—°ë§¤ì¶œ
+    debt_amount     NUMBER,                         -- ë¶€ì±„ê¸ˆì•¡
+    net_profit      NUMBER,                         -- ìˆœì´ìµ
+    total_assets    NUMBER,                         -- ì´ ìì‚°
+    current_assets  NUMBER,                         -- ìœ ë™ìì‚°
+    fixed_assets    NUMBER,                         -- ê³ ì •ìì‚°
+    total_cost      NUMBER,                         -- ì´ë¹„ìš©
+    company_id      VARCHAR2(20)     NOT NULL,      -- ê¸°ì—…ì½”ë“œ(FK)
     CONSTRAINT FK_FS_COM FOREIGN KEY(company_id) REFERENCES Company(company_id)
 );
 
--- 3. Àç¹«Àû¿ä¼Ò
+-- 3. ì¬ë¬´ì ìš”ì†Œ
 CREATE TABLE FinancialFactor(
-    factor_id       VARCHAR2(20) PRIMARY KEY,   -- Àç¹«¿ä¼ÒÄÚµå(PK)
-    evaluation_date DATE         NOT NULL,      -- Æò°¡³¯Â¥
-    stability       NUMBER       NOT NULL,      -- ¾ÈÁ¤¼º
-    profitability   NUMBER       NOT NULL,      -- ¼öÀÍ¼º
-    activity        NUMBER       NOT NULL,      -- È°µ¿¼º
-    cash_flow       NUMBER       NOT NULL,      -- Çö±İ Èå¸§¼º
-    company_id      VARCHAR2(20) NOT NULL,      -- ±â¾÷ÄÚµå(FK)
+    factor_id       VARCHAR2(20) PRIMARY KEY,   -- ì¬ë¬´ìš”ì†Œì½”ë“œ(PK)
+    evaluation_date DATE         NOT NULL,      -- í‰ê°€ë‚ ì§œ
+    stability       NUMBER       NOT NULL,      -- ì•ˆì •ì„±
+    profitability   NUMBER       NOT NULL,      -- ìˆ˜ìµì„±
+    activity        NUMBER       NOT NULL,      -- í™œë™ì„±
+    cash_flow       NUMBER       NOT NULL,      -- í˜„ê¸ˆ íë¦„ì„±
+    total_score     NUMBER,                     -- ì´ ì ìˆ˜
+    company_id      VARCHAR2(20) NOT NULL,      -- ê¸°ì—…ì½”ë“œ(FK)
     CONSTRAINT FK_FF_COM FOREIGN KEY(company_id) REFERENCES Company(company_id)
 );
 
--- 4. °èÁÂÁ¤º¸
+-- ALTER TABLE FinancialFactor ADD total_score NUMBER;
+
+-- 4. ê³„ì¢Œì •ë³´
 CREATE TABLE Account(
-    account_id      VARCHAR2(20)	 PRIMARY KEY,   -- °èÁÂÄÚµå(PK)
-    account_no      VARCHAR2(20)	 NOT NULL,      -- °èÁÂ¹øÈ£
-    account_name    VARCHAR2(30),                   -- °èÁÂ¸í
-    classifica      VARCHAR2(10)	 NOT NULL,      -- ºĞ·ù
-    branch          VARCHAR2(10),                   -- °èÁÂ °ü¸®Á¡
-    open_date       DATE             NOT NULL,      -- °³¼³ÀÏ
-    balance         NUMBER           NOT NULL,      -- ÀÜ¾×
-    company_id      VARCHAR2(20)     NOT NULL,      -- ±â¾÷ÄÚµå(FK)
+    account_id      VARCHAR2(20)	 PRIMARY KEY,   -- ê³„ì¢Œì½”ë“œ(PK)
+    account_no      VARCHAR2(20)	 NOT NULL,      -- ê³„ì¢Œë²ˆí˜¸
+    account_name    VARCHAR2(30),                   -- ê³„ì¢Œëª…
+    classifica      VARCHAR2(10)	 NOT NULL,      -- ë¶„ë¥˜
+    branch          VARCHAR2(10),                   -- ê³„ì¢Œ ê´€ë¦¬ì 
+    open_date       DATE             NOT NULL,      -- ê°œì„¤ì¼
+    balance         NUMBER           NOT NULL,      -- ì”ì•¡
+    company_id      VARCHAR2(20)     NOT NULL,      -- ê¸°ì—…ì½”ë“œ(FK)
     CONSTRAINT FK_AC_COM FOREIGN KEY(company_id) REFERENCES Company(company_id)
 );
 
--- 5. ´ëÃâ±İ¸®
+-- 5. ëŒ€ì¶œê¸ˆë¦¬
 CREATE TABLE InterestRate(
-    interest_id        VARCHAR2(20)	 PRIMARY KEY,   -- ´ëÃâ±İ¸®ÄÚµå(PK)
-    base_rate          NUMBER        NOT NULL,      -- ±âÁØ±İ¸®
-    effective_year     DATE          NOT NULL,      -- Àû¿ë¿¬µµ
-    applied_rate       NUMBER        NOT NULL,      -- Àû¿ë±İ¸®
-    company_id         VARCHAR2(20)  NOT NULL,      -- ±â¾÷ÄÚµå(FK)
+    interest_id        VARCHAR2(20)	 PRIMARY KEY,   -- ëŒ€ì¶œê¸ˆë¦¬ì½”ë“œ(PK)
+    base_rate          NUMBER        NOT NULL,      -- ê¸°ì¤€ê¸ˆë¦¬
+    effective_year     DATE          NOT NULL,      -- ì ìš©ì—°ë„
+    applied_rate       NUMBER        NOT NULL,      -- ì ìš©ê¸ˆë¦¬
+    company_id         VARCHAR2(20)  NOT NULL,      -- ê¸°ì—…ì½”ë“œ(FK)
     CONSTRAINT FK_IR_COM FOREIGN KEY(company_id) REFERENCES Company(company_id)
 );
 
--- 6. ´ëÃâÁ¤º¸
+-- 6. ëŒ€ì¶œì •ë³´
 CREATE TABLE Loan(
-    loan_id             VARCHAR2(20)	 PRIMARY KEY,   -- ´ëÃâÄÚµå(PK)
-    loan_amount         NUMBER           NOT NULL,      -- ´ëÃâ±İ¾×
-    repayment_period    NUMBER           NOT NULL,      -- »óÈ¯±â°£
-    repayment_status    VARCHAR2(20)	 NOT NULL,      -- »óÈ¯»óÅÂ
-    account_id          VARCHAR2(20)     NOT NULL,      -- °èÁÂÄÚµå(FK)
-    loan_rate           VARCHAR2(20)     NOT NULL,      -- ´ëÃâ±İ¸®(FK)
+    loan_id             VARCHAR2(20)	 PRIMARY KEY,   -- ëŒ€ì¶œì½”ë“œ(PK)
+    loan_amount         NUMBER           NOT NULL,      -- ëŒ€ì¶œê¸ˆì•¡
+    repayment_period    NUMBER           NOT NULL,      -- ìƒí™˜ê¸°ê°„
+    repayment_status    VARCHAR2(20)	 NOT NULL,      -- ìƒí™˜ìƒíƒœ
+    account_id          VARCHAR2(20)     NOT NULL,      -- ê³„ì¢Œì½”ë“œ(FK)
+    loan_rate           VARCHAR2(20)     NOT NULL,      -- ëŒ€ì¶œê¸ˆë¦¬(FK)
     CONSTRAINT FK_LOAN_AC FOREIGN KEY(account_id) REFERENCES Account(account_id),
     CONSTRAINT FK_LOAN_IR FOREIGN KEY(loan_rate) REFERENCES InterestRate(interest_id)
 );
 
--- 7. ½Å¿ëÆò°¡
+-- 7. ì‹ ìš©í‰ê°€
 CREATE TABLE CreditEvaluation(
-    evaluation_id    VARCHAR2(20)    PRIMARY KEY,   -- ½Å¿ëÆò°¡ÄÚµå(PK)
-    evaluation_date  DATE            NOT NULL,      -- Æò°¡³¯Â¥
-    credit_score     NUMBER          NOT NULL,      -- ½Å¿ëÁ¡¼ö
-    loan_limit       NUMBER          NOT NULL,      -- ´ëÃâÇÑµµ
-    company_id       VARCHAR2(20)    NOT NULL,      -- ±â¾÷ÄÚµå(FK)
+    evaluation_id    VARCHAR2(20)    PRIMARY KEY,   -- ì‹ ìš©í‰ê°€ì½”ë“œ(PK)
+    evaluation_date  DATE            NOT NULL,      -- í‰ê°€ë‚ ì§œ
+    credit_score     NUMBER          NOT NULL,      -- ì‹ ìš©ì ìˆ˜
+    loan_limit       NUMBER          NOT NULL,      -- ëŒ€ì¶œí•œë„
+    company_id       VARCHAR2(20)    NOT NULL,      -- ê¸°ì—…ì½”ë“œ(FK)
     CONSTRAINT FK_CE_COM FOREIGN KEY(company_id) REFERENCES Company(company_id)
 );
 
--- 8. ¸®½ºÅ©Æò°¡
+-- 8. ë¦¬ìŠ¤í¬í‰ê°€
 CREATE TABLE RiskEvaluation(
-    risk_id             VARCHAR2(20)    PRIMARY KEY,    -- ¸®½ºÅ©Æò°¡ÄÚµå(PK)
-    evaluation_date     DATE            NOT NULL,       -- Æò°¡³¯Â¥
-    evaluator           VARCHAR2(30)    NOT NULL,       -- Æò°¡ÀÚ
-    industry_risk       NUMBER          NOT NULL,       -- »ê¾÷À§Çè
-    management_risk     NUMBER          NOT NULL,       -- °æ¿µÀ§Çè
-    operation_risk      NUMBER          NOT NULL,       -- ¿µ¾÷À§Çè
-    financial_risk      NUMBER          NOT NULL,       -- Àç¹«À§Çè
-    credibility         NUMBER          NOT NULL,       -- ½Å·Ú¼º
-    total_score         NUMBER          NOT NULL,       -- ÃÑÁ¡¼ö
-    company_id          VARCHAR2(20)    NOT NULL,       -- ±â¾÷ÄÚµå(FK)
+    risk_id             VARCHAR2(20)    PRIMARY KEY,    -- ë¦¬ìŠ¤í¬í‰ê°€ì½”ë“œ(PK)
+    evaluation_date     DATE            NOT NULL,       -- í‰ê°€ë‚ ì§œ
+    evaluator           VARCHAR2(30)    NOT NULL,       -- í‰ê°€ì
+    industry_risk       NUMBER          NOT NULL,       -- ì‚°ì—…ìœ„í—˜
+    management_risk     NUMBER          NOT NULL,       -- ê²½ì˜ìœ„í—˜
+    operation_risk      NUMBER          NOT NULL,       -- ì˜ì—…ìœ„í—˜
+    financial_risk      NUMBER          NOT NULL,       -- ì¬ë¬´ìœ„í—˜
+    credibility         NUMBER          NOT NULL,       -- ì‹ ë¢°ì„±
+    total_score         NUMBER          NOT NULL,       -- ì´ì ìˆ˜
+    company_id          VARCHAR2(20)    NOT NULL,       -- ê¸°ì—…ì½”ë“œ(FK)
     CONSTRAINT FK_RE_COM FOREIGN KEY(company_id) REFERENCES Company(company_id)
 );
 
--- 9. °Å·¡³»¿ª
+-- 9. ê±°ë˜ë‚´ì—­
 CREATE TABLE Transaction(
-    transaction_id          VARCHAR2(20)    PRIMARY KEY,    -- °Å·¡³»¿ªÄÚµå(PK)
-    transaction_datetime    DATE            NOT NULL,       -- °Å·¡ÀÏ½Ã
-    transaction_amount      NUMBER          NOT NULL,       -- °Å·¡±İ¾×
-    transaction_type        VARCHAR2(30),                   -- °Å·¡À¯Çü
-    balance                 NUMBER          NOT NULL,       -- ÀÜ¾×
-    account_id              VARCHAR2(20)    NOT NULL,       -- °èÁÂÄÚµå(FK)
-    remarks                 VARCHAR2(100),                  -- ºñ°í
+    transaction_id          VARCHAR2(20)    PRIMARY KEY,    -- ê±°ë˜ë‚´ì—­ì½”ë“œ(PK)
+    transaction_datetime    DATE            NOT NULL,       -- ê±°ë˜ì¼ì‹œ
+    transaction_amount      NUMBER          NOT NULL,       -- ê±°ë˜ê¸ˆì•¡
+    transaction_type        VARCHAR2(30),                   -- ê±°ë˜ìœ í˜•
+    balance                 NUMBER          NOT NULL,       -- ì”ì•¡
+    account_id              VARCHAR2(20)    NOT NULL,       -- ê³„ì¢Œì½”ë“œ(FK)
+    remarks                 VARCHAR2(100),                  -- ë¹„ê³ 
     CONSTRAINT FK_TRAN_AC FOREIGN KEY(account_id) REFERENCES Account(account_id)
 );
 
--- 10. È¸¿øÁ¤º¸(Spring Á¦°ø Users DB »ç¿ëÀ¸·Î Oracle DB »ç¿ë X)
+-- 10. íšŒì›ì •ë³´(Spring ì œê³µ Users DB ì‚¬ìš©ìœ¼ë¡œ Oracle DB ì‚¬ìš© X)
 --CREATE TABLE UserInfo(
---    user_id     VARCHAR2(30)    PRIMARY KEY,    -- ¾ÆÀÌµğ
---    pwd         VARCHAR2(50)    NOT NULL,       -- ºñ¹Ğ¹øÈ£
---    email       VARCHAR2(100)   NOT NULL,       -- ÀÌ¸ŞÀÏ
---    user_name   VARCHAR2(50)    NOT NULL,       -- ÀÌ¸§
---    phone       VARCHAR2(20)    NOT NULL,       -- ÀüÈ­¹øÈ£
---    role        VARCHAR2(20)    NOT NULL,       -- ±¸ºĞ(±â¾÷/ÀºÇà)
---    company_id  VARCHAR2(20),                   -- ±â¾÷ÄÚµå(FK, ±â¾÷ »ç¿ëÀÚ¸¸ ÇØ´ç)
+--    user_id     VARCHAR2(30)    PRIMARY KEY,    -- ì•„ì´ë””
+--    pwd         VARCHAR2(50)    NOT NULL,       -- ë¹„ë°€ë²ˆí˜¸
+--    email       VARCHAR2(100)   NOT NULL,       -- ì´ë©”ì¼
+--    user_name   VARCHAR2(50)    NOT NULL,       -- ì´ë¦„
+--    phone       VARCHAR2(20)    NOT NULL,       -- ì „í™”ë²ˆí˜¸
+--    role        VARCHAR2(20)    NOT NULL,       -- êµ¬ë¶„(ê¸°ì—…/ì€í–‰)
+--    company_id  VARCHAR2(20),                   -- ê¸°ì—…ì½”ë“œ(FK, ê¸°ì—… ì‚¬ìš©ìë§Œ í•´ë‹¹)
 --    CONSTRAINT FK_USER_COM FOREIGN KEY(company_id) REFERENCES Company(company_id)
 --);
 
 commit;
 
 -----------------------------
-/*   DDL ½ÃÄö½º ¹× Æ®¸®°Å      */
+/*   DDL ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°      */
 -----------------------------
--- 1. ±â¾÷Á¤º¸ ½ÃÄö½º ¹× Æ®¸®°Å
+-- 1. ê¸°ì—…ì •ë³´ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -147,7 +152,7 @@ BEGIN
 END;
 /
 
--- 2. Àç¹«Á¦Ç¥ ½ÃÄö½º ¹× Æ®¸®°Å
+-- 2. ì¬ë¬´ì œí‘œ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -165,7 +170,7 @@ BEGIN
 END;
 /
 
--- 3. Àç¹«¿ä¼Ò ½ÃÄö½º ¹× Æ®¸®°Å
+-- 3. ì¬ë¬´ìš”ì†Œ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -183,7 +188,7 @@ BEGIN
 END;
 /
 
--- 4. °èÁÂÁ¤º¸ ½ÃÄö½º ¹× Æ®¸®°Å
+-- 4. ê³„ì¢Œì •ë³´ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -201,7 +206,7 @@ BEGIN
 END;
 /
 
--- 5. ´ëÃâ±İ¸® ½ÃÄö½º ¹× Æ®¸®°Å
+-- 5. ëŒ€ì¶œê¸ˆë¦¬ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -219,7 +224,7 @@ BEGIN
 END;
 /
 
--- 6. ´ëÃâÁ¤º¸ ½ÃÄö½º ¹× Æ®¸®°Å
+-- 6. ëŒ€ì¶œì •ë³´ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -237,7 +242,7 @@ BEGIN
 END;
 /
 
--- 7. ½Å¿ëÆò°¡ ½ÃÄö½º ¹× Æ®¸®°Å
+-- 7. ì‹ ìš©í‰ê°€ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -255,7 +260,7 @@ BEGIN
 END;
 /
 
--- 8. ¸®½ºÅ©Æò°¡ ½ÃÄö½º ¹× Æ®¸®°Å
+-- 8. ë¦¬ìŠ¤í¬í‰ê°€ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -273,7 +278,7 @@ BEGIN
 END;
 /
 
--- 9. °Å·¡³»¿ª ½ÃÄö½º ¹× Æ®¸®°Å
+-- 9. ê±°ë˜ë‚´ì—­ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±°
 DECLARE
     CNT INTEGER;
 BEGIN
@@ -291,7 +296,7 @@ BEGIN
 END;
 /
 
--- 10. È¸¿øÁ¤º¸ ½ÃÄö½º ¹× Æ®¸®°Å (Spring Á¦°ø Users DB »ç¿ëÀ¸·Î Oracle DB »ç¿ë X)
+-- 10. íšŒì›ì •ë³´ ì‹œí€€ìŠ¤ ë° íŠ¸ë¦¬ê±° (Spring ì œê³µ Users DB ì‚¬ìš©ìœ¼ë¡œ Oracle DB ì‚¬ìš© X)
 --DECLARE
 --    CNT INTEGER;
 --BEGIN
