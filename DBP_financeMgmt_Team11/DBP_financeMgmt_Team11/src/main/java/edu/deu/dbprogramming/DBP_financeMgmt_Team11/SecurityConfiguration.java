@@ -49,7 +49,7 @@ public class SecurityConfiguration {
         // @formatter:off
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/admin-home").hasRole("ADMIN") // "/admin-home" 경로는 ADMIN 권한만 접근 가능
+                        .requestMatchers("/manager-home").hasRole("manager") // "/manager-home" 경로는 manager 권한만 접근 가능
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
@@ -58,8 +58,8 @@ public class SecurityConfiguration {
                         .successHandler((request, response, authentication) -> {
                             // 권한에 따라 리디렉션 처리
                             if (authentication.getAuthorities().stream()
-                                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-                                response.sendRedirect("/admin-home");
+                                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_manager"))) {
+                                response.sendRedirect("/manager-home");
                             } else {
                                 response.sendRedirect("/client-home");
                             }
@@ -75,14 +75,14 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService(DataSource dataSource) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-        // 사용자 정보 조회 쿼리
+        /*// 사용자 정보 조회 쿼리
         userDetailsManager.setUsersByUsernameQuery(
-                "SELECT USER_ID AS username, PASSWORD, ENABLED FROM USERS WHERE USER_ID = ?"
-        );
+                "SELECT USERNAME, PASSWORD, ENABLED FROM USERS WHERE USER_ID = ?"
+        );*/
 
         // 권한 정보 조회 쿼리
         userDetailsManager.setAuthoritiesByUsernameQuery(
-                "SELECT USER_ID AS username, ROLE AS authority FROM USERS WHERE USER_ID = ?"
+                "SELECT USERNAME, ROLE AS authority FROM USERS WHERE USERNAME = ?"
         );
 
         return userDetailsManager;

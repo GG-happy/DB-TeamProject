@@ -8,10 +8,10 @@ import java.util.Map;
 @Service
 public class UserService {
 
-    private final UserDao userDao;
+    private static UserDao userDao = null;
 
     public UserService(UserDao userDao) {
-        this.userDao = userDao;
+        UserService.userDao = userDao;
     }
 
     // 모든 사용자 정보 조회
@@ -20,7 +20,7 @@ public class UserService {
     }
 
     // 특정 사용자 정보 조회
-    public Map<String, Object> getUserById(String userId) {
+    public static Map<String, Object> getUserById(String userId) {
         Map<String, Object> user = userDao.getUserById(userId);
 
         // 추가 로직 (예: 특정 필드 검증, 데이터 가공 등)

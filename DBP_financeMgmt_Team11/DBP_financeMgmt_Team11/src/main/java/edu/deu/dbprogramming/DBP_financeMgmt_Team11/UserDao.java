@@ -24,13 +24,13 @@ public class UserDao {
 
     // 특정 사용자 조회
     public Map<String, Object> getUserById(String userId) {
-        String query = "SELECT * FROM USERS WHERE USER_ID = ?";
+        String query = "SELECT * FROM USERS WHERE USERNAME = ?";
         return jdbcTemplate.queryForMap(query, userId);
     }
 
 
     public String getClientCodeByUserId(String userId) {
-        String query = "SELECT CLIENT_CODE FROM USERS WHERE USER_ID = ?";
+        String query = "SELECT CLIENT_CODE FROM USERS WHERE USERNAME = ?";
         try {
             return jdbcTemplate.queryForObject(query, new Object[]{userId}, String.class);
         } catch (EmptyResultDataAccessException e) {
