@@ -18,7 +18,7 @@ public class ClientHomeController {
         Map<String, Object> userinfo= UserService.getUserInfo(user);
         userinfo.get("name");
         try{
-            String clientCode=userinfo.get("clientCode").toString();
+            String clientCode=userinfo.get("client_code").toString();
 
         }catch (NullPointerException e){
             return "index";
