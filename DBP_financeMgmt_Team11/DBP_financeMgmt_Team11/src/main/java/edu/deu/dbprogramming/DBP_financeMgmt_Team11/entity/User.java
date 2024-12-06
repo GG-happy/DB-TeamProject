@@ -123,4 +123,9 @@ public class User {
         this.email = email;
     }
 
+    public User() {
+        // 기본 생성자
+    }
+
+
 }

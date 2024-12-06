@@ -38,6 +38,55 @@ public class UserDao {
         }
     }
 
+    public boolean addUser(Map<String, Object> userMap) {
+        String query = """
+                    INSERT INTO USERS (USERNAME, PASSWORD, NAME, TITLE, EMAIL, PHONE, ROLE)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """;
+
+        try {
+            // jdbcTemplate의 update 메서드로 데이터 삽입
+            jdbcTemplate.update(query,
+                    userMap.get("username"), // 첫 번째 파라미터: USERNAME
+                    userMap.get("password"), // 두 번째 파라미터: PASSWORD
+                    userMap.get("name"),     // 세 번째 파라미터: NAME
+                    userMap.get("title"),
+                    userMap.get("email"),    // 네 번째 파라미터: EMAIL
+                    userMap.get("phone"),    // 다섯 번째 파라미터: PHONE
+                    userMap.get("role")     // 여섯 번째 파라미터: ROLE
+            );
+            return true; // 성공 시 true 반환
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // 실패 시 false 반환
+        }
+    }
+
+    public boolean updateUser(Map<String, Object> userMap) {
+        String query = """
+                UPDATE USERS
+                SET USERNAME = ?, PASSWORD = ?, NAME = ?, TITLE = ?,  EMAIL = ?, PHONE = ?, ROLE = ?
+                WHERE USERNAME = ?
+                """;
+
+        try {
+            // jdbcTemplate의 update 메서드로 데이터 삽입
+            jdbcTemplate.update(query,
+                    userMap.get("username"), // 첫 번째 파라미터: USERNAME
+                    userMap.get("passwordEdit"), // 두 번째 파라미터: PASSWORD
+                    userMap.get("name"),     // 세 번째 파라미터: NAME
+                    userMap.get("title"),
+                    userMap.get("email"),    // 네 번째 파라미터: EMAIL
+                    userMap.get("phone"),    // 다섯 번째 파라미터: PHONE
+                    userMap.get("role"),     // 여섯 번째 파라미터: ROLE
+                    userMap.get("original_username")
+            );
+            return true; // 성공 시 true 반환
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // 실패 시 false 반환
+        }
+    }
 
 
 }

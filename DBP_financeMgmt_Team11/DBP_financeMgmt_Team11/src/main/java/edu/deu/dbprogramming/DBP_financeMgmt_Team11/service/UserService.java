@@ -1,7 +1,10 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.service;
 
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Company;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.UserDao;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.UserRepository;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +14,12 @@ import java.util.Map;
 public class UserService {
 
     private static UserDao userDao = null;
+    private static final UserRepository userRepository = null;
+    private static PasswordEncoder passwordEncoder = null;
 
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
         UserService.userDao = userDao;
+        UserService.passwordEncoder = passwordEncoder;
     }
 
     // 모든 사용자 정보 조회
@@ -61,5 +67,32 @@ public class UserService {
             throw new RuntimeException("사용자를 찾을 수 없습니다.");
         }
         return clientCode;
+    }
+
+    public static boolean addUser(Map<String, Object> userMap) {
+        try {
+            userMap.put("password", passwordEncoder.encode(userMap.get("password").toString()));
+            return userDao.addUser(userMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updateUser(Map<String, Object> userMap) {
+        try {
+            if (userMap.get("passwordEdit") == null || ((String) userMap.get("passwordEdit")).isEmpty()) {
+                userMap.put("passwordEdit", getUserInfo((String) userMap.get("original_username")));
+            }
+            userMap.put("passwordEdit", passwordEncoder.encode(userMap.get("passwordEdit").toString()));
+            return userDao.addUser(userMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String encryptPassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
     }
 }

@@ -49,7 +49,8 @@ public class SecurityConfiguration {
         // @formatter:off
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/manager-home").hasRole("manager") // "/manager-home" 경로는 manager 권한만 접근 가능
+                        .requestMatchers("/manager-home").hasRole("bank-manager") // "/manager-home" 경로는 manager 권한만 접근 가능
+                        .requestMatchers("/signup","/userRegister").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
@@ -58,7 +59,7 @@ public class SecurityConfiguration {
                         .successHandler((request, response, authentication) -> {
                             // 권한에 따라 리디렉션 처리
                             if (authentication.getAuthorities().stream()
-                                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_manager"))) {
+                                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_bank-manager"))) {
                                 response.sendRedirect("/manager-home");
                             } else {
                                 response.sendRedirect("/client-home");
