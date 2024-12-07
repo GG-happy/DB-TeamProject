@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <title>My Page for Client</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업 고객 대시보드</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>Welcome to Client Page</h1>
-<p>안녕하세요, <span th:text="${name}"/> <span th:text="${title}"/>님!</p>
-<p>
-    Phone: <span th:text="${phone}"/><br>Email: <span th:text="${email}"/>
-</p>
-<a href="/logout">로그아웃</a>
+<div class="dashboard">
+    <h1>기업 고객 대시보드</h1>
+    <p>안녕하세요, <span th:text="${name}"/> <span th:text="${title}"/>님!</p>
+    <p>Phone: <span th:text="${phone}"/><br>Email: <span th:text="${email}"/></p>
+    <div class="company-info">
+        <h2>기업 정보</h2>
+        <ul>
+            <li><strong>사업자등록번호:</strong> <span th:text="${companyInfo.businessNo}"></span></li>
+            <li><strong>기업명:</strong> <span th:text="${companyInfo.companyName}"></span></li>
+            <li><strong>기업규모:</strong> <span th:text="${companyInfo.companySize}"></span></li>
+            <li><strong>신용등급:</strong> <span th:text="${companyInfo.creditGrade}"></span></li>
+        </ul>
+    </div>
+    <div class="actions">
+        <button onclick="location.href='/editFinancialStatements'">재무제표 편집</button>
+        <button onclick="location.href='/accountsAndLoans'">계좌 및 대출정보</button>
+        <button onclick="location.href='/applyForLoan'">대출 신청</button>
+    </div>
+</div>
 </body>
 </html>

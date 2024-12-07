@@ -19,6 +19,9 @@ public interface CompanyRepository extends JpaRepository<Company, String> {
 
     List<Company> findByCompanyNameContainingAndBusinessNoContaining(@Size(max = 100) @NotNull String companyName, @Size(max = 30) @NotNull String businessNo);
 
+    Company findByCompanyId(String companyId);
+
+
     // 특정 규모의 기업 검색
     List<Company> findByCompanySize(String companySize);
 

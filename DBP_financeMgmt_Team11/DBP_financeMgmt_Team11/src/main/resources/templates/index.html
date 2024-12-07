@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>은행 서비스</title>
+    <link rel="stylesheet" href="/css/styles.css">
     <script>
         // 팝업 창 열기
         function openSearchPopup() {
@@ -21,42 +22,11 @@
         }
 
     </script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin-top: 50px;
-            background-color: #f4f4f9;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .button-group {
-            margin: 20px 0;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            margin: 10px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
 </head>
 <body>
-<h1>은행 서비스 메인 페이지</h1>
+<!-- 버튼 그룹을 블록 컨테이너로 유지 -->
 <div class="button-group">
+    <h1>은행 서비스 메인 페이지</h1>
     <!-- 로그인 여부에 따라 버튼 표시 -->
     <div th:if="${isAuthentication}">
         <button onclick="location.href='/logout'">로그아웃</button>
@@ -66,7 +36,6 @@
         <button onclick="location.href='/login'">로그인</button>
         <button onclick="location.href='/signup'">회원가입</button>
     </div>
-    <br>
     <div th:if="${isAuthentication}">
         <div th:if="${isManager}">
             <button onclick="location.href='/manager-home'">업무페이지</button>
@@ -75,15 +44,14 @@
             <button onclick="location.href='/client-home'" th:if="${isClientLinked}">은행뱅킹</button>
             <form th:if="${!isClientLinked}" action="/connectClientCode" method="post">
                 <button type="button" onclick="openSearchPopup()">고객정보 선택하기</button>
-                <label for="companyID"></label>
                 <input type="hidden" id="companyID" name="companyID" readonly>
-                <label for="companyName"></label>
                 <input type="text" id="companyName" name="companyName" readonly>
-                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                <input type="hidden" name="_csrf" value="${_csrf.token}">
                 <button type="submit">고객정보 저장하기</button>
             </form>
         </div>
     </div>
 </div>
 </body>
+
 </html>
