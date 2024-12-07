@@ -60,13 +60,7 @@ public class SecurityConfiguration {
                 .formLogin((formLogin) -> formLogin
                         .defaultSuccessUrl("/client-home", true) // 기본적으로 모든 사용자 성공 시 리디렉션
                         .successHandler((request, response, authentication) -> {
-                            // 권한에 따라 리디렉션 처리
-                            if (authentication.getAuthorities().stream()
-                                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_bank-manager"))) {
-                                response.sendRedirect("/manager-home");
-                            } else {
-                                response.sendRedirect("/client-home");
-                            }
+                            response.sendRedirect("/");
                         })
                         .permitAll()
                 );
