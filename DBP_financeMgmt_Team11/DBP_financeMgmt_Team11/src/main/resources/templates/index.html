@@ -24,11 +24,26 @@
                 const companyName = popup.document.getElementById('selectedCompanyName').value;
 
                 // 부모 창의 필드 업데이트
-                document.getElementById('companyID').value = companyID;
-                document.getElementById('companyIDWork').value = companyID;
-                document.getElementById('companyName').value = companyName;
-                document.getElementById('companyNameWork').value = companyName;
+                updateElementValue('companyID', companyID);
+                updateElementValue('companyIDWork', companyID);
+                updateElementValue('companyName', companyName);
+                updateElementValue('companyNameWork', companyName);
             };
+        }
+        function updateElementValue(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.value = value;
+            }
+        }
+
+        function validateForm(Element) {
+            const hiddenValue = Element.value.trim();
+            if (!hiddenValue) {
+                alert("고객정보가 선택되지 않았습니다!");
+                return false; // 폼 제출 막기
+            }
+            return true; // 유효하면 폼 제출
         }
 
     </script>
@@ -50,20 +65,20 @@
     </div>
     <div th:if="${isAuthentication}">
         <div th:if="${isManager}">
-            <form th:if="${!isClientLinked}" action="/connectClientCode" method="post">
+            <form action="/workingToClient" method="post" onsubmit="return validateForm(companyIDWork)">
                 <button type="button" onclick="openSearchPopup()">고객정보 선택하기</button>
-                <input type="hidden" id="companyID forWork" name="companyIDWork" readonly>
-                <input type="text" id="companyName forWork" name="companyNameWork" readonly>
+                <input type="hidden" id="companyIDWork" name="companyIDWork" readonly required>
+                <input type="text" id="companyNameWork" name="companyNameWork" placeholder="아직 선택되지 않았습니다" readonly>
                 <input type="hidden" name="_csrf" value="${_csrf.token}">
                 <button type="submit">업무페이지로 이동</button>
             </form>
         </div>
         <div th:if="${!isManager}">
             <button onclick="location.href='/client-home'" th:if="${isClientLinked}">은행뱅킹</button>
-            <form th:if="${!isClientLinked}" action="/connectClientCode" method="post">
+            <form th:if="${!isClientLinked}" action="/connectClientCode" method="post" onsubmit="return validateForm(companyID)">
                 <button type="button" onclick="openSearchPopup()">고객정보 선택하기</button>
-                <input type="hidden" id="companyID" name="companyID" readonly>
-                <input type="text" id="companyName" name="companyName" readonly>
+                <input type="hidden" id="companyID" name="companyID" readonly required>
+                <input type="text" id="companyName" name="companyName" placeholder="아직 선택되지 않았습니다" readonly>
                 <input type="hidden" name="_csrf" value="${_csrf.token}">
                 <button type="submit">고객정보 저장하기</button>
             </form>

@@ -7,11 +7,20 @@
     <script>
         function selectCompany(companyID, companyName) {
             if (window.opener) {
-                window.opener.document.getElementById("companyID").value = companyID;
-                window.opener.document.getElementById("companyName").value = companyName;
+                updateElementValue('companyID', companyID);
+                updateElementValue('companyIDWork', companyID);
+                updateElementValue('companyName', companyName);
+                updateElementValue('companyNameWork', companyName);
                 window.close();
             } else {
                 alert("부모 창이 없습니다.");
+            }
+        }
+
+        function updateElementValue(id, value) {
+            const element = window.opener.document.getElementById(id);
+            if (element) {
+                element.value = value;
             }
         }
     </script>

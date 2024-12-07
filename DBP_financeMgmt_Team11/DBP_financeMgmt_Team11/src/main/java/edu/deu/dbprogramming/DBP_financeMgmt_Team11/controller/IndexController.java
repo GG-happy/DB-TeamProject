@@ -1,6 +1,7 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.controller;
 
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class IndexController {
 
     @GetMapping("/")
-    public String index(@AuthenticationPrincipal User user, Model model) {
+    public String index(@AuthenticationPrincipal User user, Model model, HttpSession session) {
 
 
         // 인증 정보를 Thymeleaf에서 처리 (SecurityContext는 자동 사용)
