@@ -21,7 +21,7 @@ public class ClientHomeController {
             String clientCode=userinfo.get("client_code").toString();
 
         }catch (NullPointerException e){
-            return "index";
+            return "redirect:/";
         }
 
 

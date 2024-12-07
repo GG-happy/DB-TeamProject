@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>은행 서비스</title>
+    <script>
+        // 팝업 창 열기
+        function openSearchPopup() {
+            const popup = window.open('/searchCompany', '기업검색', 'width=800,height=600');
+
+            popup.onunload = function () {
+                // 팝업 창에서 데이터를 선택 후 부모 창으로 전달
+                const companyID = popup.document.getElementById('selectedCompanyID').value;
+                const companyName = popup.document.getElementById('selectedCompanyName').value;
+
+                // 부모 창의 필드 업데이트
+                document.getElementById('companyID').value = companyID;
+                document.getElementById('companyName').value = companyName;
+            };
+        }
+
+    </script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -11,13 +28,16 @@
             margin-top: 50px;
             background-color: #f4f4f9;
         }
+
         h1 {
             color: #333;
             margin-bottom: 30px;
         }
+
         .button-group {
             margin: 20px 0;
         }
+
         button {
             background-color: #4CAF50;
             color: white;
@@ -28,6 +48,7 @@
             margin: 10px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #45a049;
         }
@@ -44,6 +65,24 @@
     <div th:if="${!isAuthentication}">
         <button onclick="location.href='/login'">로그인</button>
         <button onclick="location.href='/signup'">회원가입</button>
+    </div>
+    <br>
+    <div th:if="${isAuthentication}">
+        <div th:if="${isManager}">
+            <button onclick="location.href='/manager-home'">업무페이지</button>
+        </div>
+        <div th:if="${!isManager}">
+            <button onclick="location.href='/client-home'" th:if="${isClientLinked}">은행뱅킹</button>
+            <form th:if="${!isClientLinked}" action="/connectClientCode" method="post">
+                <button type="button" onclick="openSearchPopup()">고객정보 선택하기</button>
+                <label for="companyID"></label>
+                <input type="hidden" id="companyID" name="companyID" readonly>
+                <label for="companyName"></label>
+                <input type="text" id="companyName" name="companyName" readonly>
+                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                <button type="submit">고객정보 저장하기</button>
+            </form>
+        </div>
     </div>
 </div>
 </body>

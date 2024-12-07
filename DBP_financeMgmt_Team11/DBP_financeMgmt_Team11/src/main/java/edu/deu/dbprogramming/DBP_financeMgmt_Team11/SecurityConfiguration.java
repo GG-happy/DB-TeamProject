@@ -48,9 +48,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
+                .csrf((csrf) -> csrf
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/connectClientCode")) // 특정 URL에서 CSRF 비활성화
+                )
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/manager-home").hasRole("bank-manager") // "/manager-home" 경로는 manager 권한만 접근 가능
-                        .requestMatchers("/","/signup","/userRegister").permitAll()
+                        .requestMatchers("/", "/error", "/signup", "/userRegister").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
@@ -66,11 +69,11 @@ public class SecurityConfiguration {
                             }
                         })
                         .permitAll()
-
                 );
         // @formatter:on
         return http.build();
     }
+
 
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {

@@ -88,5 +88,19 @@ public class UserDao {
         }
     }
 
+    public boolean updateClientCode(String username, String clientCode) {
+        String query = "UPDATE USERS SET DBP.USERS.CLIENT_CODE = ? WHERE USERNAME = ?";
+        try {
+            // jdbcTemplate의 update 메서드로 데이터 삽입
+            jdbcTemplate.update(query,
+                    clientCode,
+                    username
+            );
+            return true; // 성공 시 true 반환
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // 실패 시 false 반환
+        }
+    }
 
 }
