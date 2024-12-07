@@ -59,7 +59,7 @@ public class UserService {
         return clientCode;
     }
 
-    public String getClientCode(User user) {
+    public static String getClientCode(User user) {
         String clientCode=userDao.getClientCodeByUserId(user.getUsername());
 
         // 추가 로직 (예: 특정 필드 검증, 데이터 가공 등)

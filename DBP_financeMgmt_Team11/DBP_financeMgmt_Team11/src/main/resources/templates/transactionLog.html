@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>거래 내역</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>거래 내역</h1>
+<table>
+    <thead>
+    <tr>
+        <th>거래 ID</th>
+        <th>거래 일시</th>
+        <th>거래 금액</th>
+        <th>거래 유형</th>
+        <th>잔액</th>
+        <th>계좌 ID</th>
+        <th>비고</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="transaction : ${transactions}">
+        <td th:text="${transaction.transaction_id}"></td>
+        <td th:text="${#dates.format(transaction.transaction_datetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${transaction.transaction_amount}"></td>
+        <td th:text="${transaction.transaction_type}"></td>
+        <td th:text="${transaction.balance}"></td>
+        <td th:text="${transaction.account_id}"></td>
+        <td th:text="${transaction.remarks}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

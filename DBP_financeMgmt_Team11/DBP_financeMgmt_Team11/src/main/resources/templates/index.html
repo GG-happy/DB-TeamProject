@@ -8,7 +8,15 @@
     <script>
         // 팝업 창 열기
         function openSearchPopup() {
-            const popup = window.open('/searchCompany', '기업검색', 'width=800,height=600');
+            // 화면의 중앙 위치 계산
+            const width = 1200;
+            const height = 1000;
+            const left = 0;
+            const top = 0;
+
+            // 팝업 창 오픈
+            const popup = window.open('/searchCompany', '기업검색', `width=${width},height=${height},left=${left},top=${top}`);
+
 
             popup.onunload = function () {
                 // 팝업 창에서 데이터를 선택 후 부모 창으로 전달
@@ -17,7 +25,9 @@
 
                 // 부모 창의 필드 업데이트
                 document.getElementById('companyID').value = companyID;
+                document.getElementById('companyIDWork').value = companyID;
                 document.getElementById('companyName').value = companyName;
+                document.getElementById('companyNameWork').value = companyName;
             };
         }
 
@@ -29,6 +39,8 @@
     <h1>은행 서비스 메인 페이지</h1>
     <!-- 로그인 여부에 따라 버튼 표시 -->
     <div th:if="${isAuthentication}">
+        <p>안녕하세요, <span th:text="${name}"></span> <span th:text="${title}"></span>님!</p>
+        <p>Phone: <span th:text="${phone}"></span><br>Email: <span th:text="${email}"></span></p>
         <button onclick="location.href='/logout'">로그아웃</button>
         <button onclick="location.href='/userInfoEdit'">회원정보 수정</button>
     </div>
@@ -38,7 +50,13 @@
     </div>
     <div th:if="${isAuthentication}">
         <div th:if="${isManager}">
-            <button onclick="location.href='/manager-home'">업무페이지</button>
+            <form th:if="${!isClientLinked}" action="/connectClientCode" method="post">
+                <button type="button" onclick="openSearchPopup()">고객정보 선택하기</button>
+                <input type="hidden" id="companyID forWork" name="companyIDWork" readonly>
+                <input type="text" id="companyName forWork" name="companyNameWork" readonly>
+                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                <button type="submit">업무페이지로 이동</button>
+            </form>
         </div>
         <div th:if="${!isManager}">
             <button onclick="location.href='/client-home'" th:if="${isClientLinked}">은행뱅킹</button>

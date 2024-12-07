@@ -2,7 +2,6 @@ package edu.deu.dbprogramming.DBP_financeMgmt_Team11.controller;
 
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Company;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.CompanyRepository;
-import org.hibernate.tool.schema.spi.SqlScriptException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,6 +67,6 @@ public class SearchCompanyController {
         model.addAttribute("companyList", companyList);
         model.addAttribute("businessNo", businessNo);
         model.addAttribute("companyName", companyName);
-        return "search-company";
+        return "searchCompany";
     }
 }

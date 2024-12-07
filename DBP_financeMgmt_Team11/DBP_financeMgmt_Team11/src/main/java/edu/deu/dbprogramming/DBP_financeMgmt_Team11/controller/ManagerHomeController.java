@@ -24,6 +24,6 @@ public class ManagerHomeController {
         model.addAttribute("phone", userinfo.get("phone"));
         model.addAttribute("email", userinfo.get("email"));
 
-        return "manager-home"; // manager-home.html 뷰로 이동
+        return "managerHome"; // managerHome.html 뷰로 이동
     }
 }

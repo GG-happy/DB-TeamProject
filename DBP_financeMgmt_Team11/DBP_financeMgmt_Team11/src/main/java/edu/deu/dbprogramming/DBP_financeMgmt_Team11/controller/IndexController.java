@@ -31,7 +31,10 @@ public class IndexController {
             model.addAttribute("email", userinfo.get("email"));
             model.addAttribute("role", userinfo.get("role"));
 
-            if(userinfo.get("role")=="ROLE_bank-manager") {
+            System.out.print("userinfo.get(role)");
+            System.out.println(userinfo.get("role"));
+
+            if(userinfo.get("role").equals("ROLE_bank-manager")) {
                 model.addAttribute("isManager", true);
             }else {
                 model.addAttribute("isManager", false);

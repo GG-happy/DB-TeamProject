@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계좌 및 대출 정보 편집</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="edit-form">
+    <h1>계좌 및 대출 정보 편집</h1>
+    <form action="/account-loan/save" method="post">
+        <!-- CSRF 토큰 -->
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
+        <!-- 계좌 정보 -->
+        <div class="section">
+            <h2>계좌 정보</h2>
+            <div class="form-group">
+                <label for="accountId">계좌코드:</label>
+                <input type="text" id="accountId" name="accountId" placeholder="계좌코드 입력" required>
+            </div>
+            <div class="form-group">
+                <label for="accountNo">계좌번호:</label>
+                <input type="text" id="accountNo" name="accountNo" placeholder="계좌번호 입력" required>
+            </div>
+            <div class="form-group">
+                <label for="accountName">계좌명:</label>
+                <input type="text" id="accountName" name="accountName" placeholder="계좌명 입력">
+            </div>
+            <div class="form-group">
+                <label for="classifica">분류:</label>
+                <select id="classifica" name="classifica" required>
+                    <option value="" disabled selected>분류 선택</option>
+                    <option value="예금">예금</option>
+                    <option value="적금">적금</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="branch">관리점:</label>
+                <input type="text" id="branch" name="branch" placeholder="관리점 입력">
+            </div>
+            <div class="form-group">
+                <label for="openDate">개설일:</label>
+                <input type="date" id="openDate" name="openDate" required>
+            </div>
+            <div class="form-group">
+                <label for="balance">잔액:</label>
+                <input type="number" id="balance" name="balance" placeholder="잔액 입력" required>
+            </div>
+        </div>
+
+        <!-- 대출 정보 -->
+        <div class="section">
+            <h2>대출 정보</h2>
+            <div class="form-group">
+                <label for="loanId">대출코드:</label>
+                <input type="text" id="loanId" name="loanId" placeholder="대출코드 입력" required>
+            </div>
+            <div class="form-group">
+                <label for="loanAmount">대출금액:</label>
+                <input type="number" id="loanAmount" name="loanAmount" placeholder="대출금액 입력" required>
+            </div>
+            <div class="form-group">
+                <label for="repaymentPeriod">상환기간:</label>
+                <input type="number" id="repaymentPeriod" name="repaymentPeriod" placeholder="상환기간(개월)" required>
+            </div>
+            <div class="form-group">
+                <label for="repaymentStatus">상환상태:</label>
+                <select id="repaymentStatus" name="repaymentStatus" required>
+                    <option value="" disabled selected>상환상태 선택</option>
+                    <option value="상환중">상환중</option>
+                    <option value="상환완료">상환완료</option>
+                    <option value="연체중">연체중</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="loanRate">대출금리:</label>
+                <input type="text" id="loanRate" name="loanRate" placeholder="대출금리 입력" required>
+            </div>
+        </div>
+
+        <!-- 저장 버튼 -->
+        <button type="submit">저장</button>
+    </form>
+</div>
+</body>
+</html>
