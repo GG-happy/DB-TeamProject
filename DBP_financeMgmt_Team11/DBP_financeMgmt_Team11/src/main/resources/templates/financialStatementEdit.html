@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>재무제표 편집</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="financial-statement-form">
+    <h1>재무제표 편집</h1>
+    <form action="/financial-statement/save" method="post">
+        <!-- CSRF 토큰 -->
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
+        <!-- 연도 선택 -->
+        <div class="form-group">
+            <label for="year">연도:</label>
+            <select id="year" name="year" required>
+                <option value="" disabled selected>연도 선택</option>
+                <th:block th:each="year : ${years}">
+                    <option th:value="${year}" th:text="${year}"></option>
+                </th:block>
+            </select>
+        </div>
+
+        <!-- 분기 선택 -->
+        <div class="form-group">
+            <label for="quarter">분기:</label>
+            <select id="quarter" name="quarter" required>
+                <option value="" disabled selected>분기 선택</option>
+                <option value="Q1">1분기</option>
+                <option value="Q2">2분기</option>
+                <option value="Q3">3분기</option>
+                <option value="Q4">4분기</option>
+            </select>
+        </div>
+        <br>
+
+        <!-- 재무제표 입력 -->
+        <div class="form-group">
+            <label for="annualRevenue">연매출:</label>
+            <input type="number" id="annualRevenue" name="annualRevenue" placeholder="연매출 입력" required>
+        </div>
+        <div class="form-group">
+            <label for="debtAmount">부채금액:</label>
+            <input type="number" id="debtAmount" name="debtAmount" placeholder="부채금액 입력" required>
+        </div>
+        <div class="form-group">
+            <label for="netProfit">순이익:</label>
+            <input type="number" id="netProfit" name="netProfit" placeholder="순이익 입력" required>
+        </div>
+        <div class="form-group">
+            <label for="totalAssets">총 자산:</label>
+            <input type="number" id="totalAssets" name="totalAssets" placeholder="총 자산 입력" required>
+        </div>
+        <div class="form-group">
+            <label for="currentAssets">유동자산:</label>
+            <input type="number" id="currentAssets" name="currentAssets" placeholder="유동자산 입력" required>
+        </div>
+        <div class="form-group">
+            <label for="fixedAssets">고정자산:</label>
+            <input type="number" id="fixedAssets" name="fixedAssets" placeholder="고정자산 입력" required>
+        </div>
+        <div class="form-group">
+            <label for="totalCost">총비용:</label>
+            <input type="number" id="totalCost" name="totalCost" placeholder="총비용 입력" required>
+        </div>
+
+        <!-- 저장 버튼 -->
+        <button type="submit">저장</button>
+    </form>
+</div>
+</body>
+</html>

@@ -40,7 +40,7 @@ public class SignUpController {
         model.addAttribute("pw_placeholder", "수정안함");
         model.addAttribute("isSignUp", false);
 
-        return "signup"; // manager-home.html 뷰로 이동
+        return "signup"; // managerHome.html 뷰로 이동
     }
     @GetMapping("/signup")
     public String signup(@AuthenticationPrincipal User user, Model model) {

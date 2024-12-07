@@ -11,124 +11,299 @@ body {
     text-align: center;
 }
 
-h1, h2 {
+/* 제목 스타일 */
+h1 {
     color: #333;
     margin-bottom: 30px;
-    text-align: center;
 }
 
+/* 폼 컨테이너 */
+.financial-statement-form {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 500px;
+}
+
+/* 폼 그룹 정렬 */
+.form-group {
+    display: flex;
+    align-items: center; /* 레이블과 입력 필드 세로 정렬 */
+    justify-content: space-between; /* 레이블과 입력 필드 양쪽 정렬 */
+    margin-bottom: 15px;
+    gap: 10px; /* 레이블과 필드 간 간격 */
+}
+
+.form-group label {
+    flex: 1; /* 레이블의 너비를 균일하게 */
+    text-align: right;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    flex: 2; /* 입력 필드가 더 넓게 */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* 버튼 스타일 */
 button {
     background-color: #4CAF50;
     color: white;
-    padding: 15px 30px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
-    margin: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    width: 100%; /* 버튼이 폼 너비에 맞게 */
+    margin-top: 20px;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
-input[type="text"] {
-    padding: 8px;
-    width: 300px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+/* 기업 정보 스타일 */
+.company-info {
+    margin: 30px 0;
+    padding: 20px;
+    background-color: #f9f9f9; /* 부드러운 배경색 추가 */
+    border-radius: 10px; /* 둥근 모서리 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+.company-info h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #333;
+    border-bottom: 2px solid #ddd; /* 제목 하단 선 */
+    padding-bottom: 10px;
+}
+
+.company-info ul {
+    list-style: none; /* 기본 리스트 스타일 제거 */
+    padding: 0;
+    margin: 0;
+}
+
+.company-info li {
+    margin: 10px 0; /* 항목 간 간격 추가 */
+    font-size: 1.1em;
+    display: flex;
+    justify-content: space-between; /* 키-값을 양쪽 정렬 */
+    border-bottom: 1px solid #eee; /* 항목 하단 선 */
+    padding-bottom: 5px;
+}
+
+.company-info li strong {
+    color: #4CAF50; /* 강조된 텍스트 색상 */
+}
+
+.company-info li span {
+    font-weight: bold;
+}
+
+/* 공통 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* 폼 컨테이너 */
+.edit-form {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 600px;
+}
+
+.edit-form h1, .edit-form h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.section {
+    margin-bottom: 30px;
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    flex: 1;
+    text-align: right;
+    font-weight: bold;
     margin-right: 10px;
 }
 
-/* 대시보드 스타일 */
-.dashboard {
-    width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+.form-group input, .form-group select {
+    flex: 2;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-.company-info {
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* 테이블 스타일 */
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
     margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+
+.dashboard-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.dashboard-table th, .dashboard-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+.dashboard-table tbody tr:nth-child(even) {
+    background-color: #f3f3f3;
+}
+
+.dashboard-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.dashboard-table td {
+    text-align: center;
+}
+
+/* 테이블 컨테이너 */
+.table-container {
+    overflow-x: auto;
+}
+
+.personal-info-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 40%;
+    margin: 20px auto;
+    text-align: left;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icon {
+    margin-right: 10px;
+    color: #009879; /* 테마 색상과 일치 */
+}
+
+.label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.dashboard-title {
+    font-size: 24px;
+    color: #009879; /* 테마 색상 */
+    flex-grow: 1;
+}
+
+.personal-info-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 40%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 각 정보 항목 사이의 간격 조정 */
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    margin-right: 10px;
+    color: #009879; /* 아이콘 색상도 테마와 일치 */
+}
+
+.label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+.info-section {
+    display: flex;
+    justify-content: space-around; /* 각 요소 사이에 균등한 공간을 두어 배치 */
+    align-items: flex-start; /* 세로 축에서 상단 정렬 */
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.personal-info-card, .company-info {
+    flex: 1; /* 두 섹션이 동등한 너비를 갖도록 설정 */
+    margin: 0 10px; /* 좌우 여백 추가 */
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .company-info ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .company-info li {
-    margin: 10px 0;
-    font-size: 1.1em;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
 }
 
-/* 버튼 그룹 */
-.button-group {
-    margin: 20px 0;
-}
-
-/* 테이블 스타일 */
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 20px 0;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-/* 폼 스타일 */
-form {
-    margin: 20px 0;
-}
-
-/* 메시지 박스 스타일 */
-.message-box {
-    text-align: center;
-    background: #ffffff;
-    padding: 20px 30px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.message-box h1 {
-    font-size: 24px;
-    color: #333333;
-}
-
-.message-box p {
-    font-size: 16px;
-    color: #666666;
-}
-
-/* 로더 스타일 */
-.loader {
-    margin: 20px auto;
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #3498db;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+.company-info li:last-child {
+    border-bottom: none;
 }
