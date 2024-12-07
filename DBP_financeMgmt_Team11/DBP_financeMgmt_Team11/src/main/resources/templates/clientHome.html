@@ -164,7 +164,7 @@
             <td th:text="${account.loanId != null ? account.repaymentStatus : '-'}"></td>
             <td th:text="${account.appliedRate != null ? account.appliedRate : '-'}"></td>
             <td>
-                <button class="action-btn" th:onclick="|location.href='@{/transactionLog(rankCode=${account.accountId})}'|">
+                <button class="action-btn" th:onclick="|location.href='@{/transactionsLog(accountId=${account.accountId})}'|">
                     거래내역 조회
                 </button>
             </td>
