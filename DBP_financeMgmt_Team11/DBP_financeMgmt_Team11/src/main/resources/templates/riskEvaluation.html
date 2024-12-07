@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리스크 평가 편집</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="financial-statement-form">
+  <h1>리스크 평가 입력</h1>
+  <form action="/risk-evaluation/save" method="post">
+    <!-- CSRF 토큰 -->
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
+    <!-- 리스크 평가 코드 -->
+    <div class="form-group">
+      <label for="risk_id">리스크 평가 코드:</label>
+      <input type="text" id="risk_id" name="risk_id" placeholder="평가 코드 입력" required>
+    </div>
+
+    <!-- 평가 날짜 -->
+    <div class="form-group">
+      <label for="evaluation_date">평가 날짜:</label>
+      <input type="date" id="evaluation_date" name="evaluation_date" required>
+    </div>
+
+    <!-- 평가자 -->
+    <div class="form-group">
+      <label for="evaluator">평가자:</label>
+      <input type="text" id="evaluator" name="evaluator" placeholder="평가자 이름 입력" required>
+    </div>
+
+    <!-- 리스크 입력 -->
+    <div class="form-group">
+      <label for="industry_risk">산업 위험:</label>
+      <input type="number" id="industry_risk" name="industry_risk" placeholder="0~100 점수 입력" required>
+    </div>
+    <div class="form-group">
+      <label for="management_risk">경영 위험:</label>
+      <input type="number" id="management_risk" name="management_risk" placeholder="0~100 점수 입력" required>
+    </div>
+    <div class="form-group">
+      <label for="operation_risk">영업 위험:</label>
+      <input type="number" id="operation_risk" name="operation_risk" placeholder="0~100 점수 입력" required>
+    </div>
+    <div class="form-group">
+      <label for="financial_risk">재무 위험:</label>
+      <input type="number" id="financial_risk" name="financial_risk" placeholder="0~100 점수 입력" required>
+    </div>
+    <div class="form-group">
+      <label for="credibility">신뢰성:</label>
+      <input type="number" id="credibility" name="credibility" placeholder="0~100 점수 입력" required>
+    </div>
+    <div class="form-group">
+      <label for="total_score">총점:</label>
+      <input type="number" id="total_score" name="total_score" placeholder="총점 입력" required>
+    </div>
+
+    <!-- 기업 코드 -->
+    <div class="form-group">
+      <label for="company_id">기업 코드:</label>
+      <input type="text" id="company_id" name="company_id" placeholder="기업 코드 입력" required>
+    </div>
+
+    <!-- 저장 버튼 -->
+    <button type="submit">저장</button>
+  </form>
+</div>
+</body>
+</html>

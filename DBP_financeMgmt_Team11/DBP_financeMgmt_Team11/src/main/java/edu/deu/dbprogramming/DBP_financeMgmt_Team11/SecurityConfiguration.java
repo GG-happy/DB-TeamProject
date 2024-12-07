@@ -49,16 +49,19 @@ public class SecurityConfiguration {
         // @formatter:off
         http
                 .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers(new AntPathRequestMatcher("/connectClientCode")) // 특정 URL에서 CSRF 비활성화
+                        .ignoringRequestMatchers(
+                                new AntPathRequestMatcher("/connectClientCode"),
+                                new AntPathRequestMatcher("/workingToClient") // 추가된 URL
+                        )
                 )
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/manager-home").hasRole("bank-manager") // "/manager-home" 경로는 manager 권한만 접근 가능
+                        .requestMatchers("/manager-home").hasRole("bank-manager")
                         .requestMatchers("/", "/error", "/signup", "/userRegister","/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
                 .formLogin((formLogin) -> formLogin
-                        .defaultSuccessUrl("/client-home", true) // 기본적으로 모든 사용자 성공 시 리디렉션
+                        .defaultSuccessUrl("/client-home", true)
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("/");
                         })
@@ -67,6 +70,7 @@ public class SecurityConfiguration {
         // @formatter:on
         return http.build();
     }
+
 
 
     @Bean
