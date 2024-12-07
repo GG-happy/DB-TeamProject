@@ -1,15 +1,50 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-    <title>안녕하세요.</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>은행 서비스</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .button-group {
+            margin: 20px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-안녕하세요. HMART에 오신 것을 환영합니다.
-<br>
-<a href="/hello">Hi! Hello</a>
-
-
+<h1>은행 서비스 메인 페이지</h1>
+<div class="button-group">
+    <!-- 로그인 여부에 따라 버튼 표시 -->
+    <div th:if="${isAuthentication}">
+        <button onclick="location.href='/logout'">로그아웃</button>
+        <button onclick="location.href='/userInfoEdit'">회원정보 수정</button>
+    </div>
+    <div th:if="${!isAuthentication}">
+        <button onclick="location.href='/login'">로그인</button>
+        <button onclick="location.href='/signup'">회원가입</button>
+    </div>
+</div>
 </body>
 </html>
-

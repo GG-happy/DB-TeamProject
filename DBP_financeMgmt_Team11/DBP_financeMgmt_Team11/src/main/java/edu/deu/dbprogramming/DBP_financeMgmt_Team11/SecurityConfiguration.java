@@ -50,7 +50,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/manager-home").hasRole("bank-manager") // "/manager-home" 경로는 manager 권한만 접근 가능
-                        .requestMatchers("/signup","/userRegister").permitAll()
+                        .requestMatchers("/","/signup","/userRegister").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
