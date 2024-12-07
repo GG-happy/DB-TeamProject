@@ -92,6 +92,15 @@ public class UserService {
         }
     }
 
+    public static boolean updateClientCode(String username, String clientCode) {
+        try {
+            return userDao.updateClientCode(username,clientCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public String encryptPassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
