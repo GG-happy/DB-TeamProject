@@ -38,8 +38,11 @@ public class ClientHomeController {
         String clientCode;
         if(userinfo.get("role").equals("ROLE_bank-manager")) {
             clientCode=(String) session.getAttribute("SelectedClientCode");
+            model.addAttribute("isManager", true);
+
         }else {
             clientCode = (String) userinfo.get("client_code");
+            model.addAttribute("isManager", false);
             if (clientCode == null) {
                 return "redirect:/"; // client_code가 없는 경우 홈으로 리다이렉션
             }
@@ -60,6 +63,8 @@ public class ClientHomeController {
         model.addAttribute("title", userinfo.get("title"));
         model.addAttribute("phone", userinfo.get("phone"));
         model.addAttribute("email", userinfo.get("email"));
+
+
 
         return "clientHome"; // clientHome.html 뷰로 이동
     }
