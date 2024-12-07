@@ -359,6 +359,11 @@ tbody tr:hover {
     background-color: #0056b3;
 }
 
+.dashboard {
+    overflow-y: auto;  // 세로 스크롤바 활성화
+}
+
+
 /* Responsive Table */
 @media screen and (max-width: 768px) {
     table {
