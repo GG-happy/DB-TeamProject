@@ -1,4 +1,12 @@
 ---------------------------------------------------------------
+/* ########  ID : SYSTEM ######## */
+---------------------------------------------------------------
+CREATE USER TeamProject IDENTIFIED BY 123
+    DEFAULT TABLESPACE USERS
+    TEMPORARY TABLESPACE TEMP;
+GRANT connect, resource, dba TO TeamProject;
+
+------------------------------------------------------------------------------------------------------------------------------
 /* ########  ID : Team ######## */
 ---------------------------------------------------------------
 ----------------------
@@ -17,7 +25,7 @@ CREATE TABLE Company (
 
 -- 2. 재무제표
 CREATE TABLE FinancialStatement(
-    satement_id     VARCHAR2(20)	 PRIMARY KEY,   -- 재무제표코드(PK)
+    statement_id     VARCHAR2(20)	 PRIMARY KEY,   -- 재무제표코드(PK)
     quarter         VARCHAR2(20)	 NOT NULL,      -- 분기
     annual_revenue  NUMBER,                         -- 연매출
     debt_amount     NUMBER,                         -- 부채금액
