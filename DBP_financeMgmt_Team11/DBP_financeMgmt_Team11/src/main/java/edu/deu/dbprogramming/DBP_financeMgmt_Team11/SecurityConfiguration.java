@@ -61,7 +61,7 @@ public class SecurityConfiguration {
                 )
                 .httpBasic(withDefaults())
                 .formLogin((formLogin) -> formLogin
-                        .defaultSuccessUrl("/client-home", true)
+                        .defaultSuccessUrl("/clientHome", true)
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("/");
                         })

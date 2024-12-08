@@ -92,13 +92,18 @@ public class SignUpController {
 
         if (isSignUp) {
             if (UserService.addUser(userMap)) {
+
                 return "signup-success";
             } else {
                 return "something-wrong";
             }
         }else{
             if(UserService.updateUser(userMap)){
-                return "index";
+                if (!username.equals(original_username)){
+                    //ID변경시 재로그인 필요
+                    return "redirect:/login?logout";
+                }
+                return "redirect:/";
             }else{
                 return "something-wrong";
             }

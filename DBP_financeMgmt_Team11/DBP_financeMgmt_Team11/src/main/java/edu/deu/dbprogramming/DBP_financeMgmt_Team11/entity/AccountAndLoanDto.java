@@ -32,7 +32,9 @@ public class AccountAndLoanDto {
         this.appliedRate = appliedRate;
     }
 
-    // Getters and Setters
+    // 기본 생성자 (필요 시 추가)
+    public AccountAndLoanDto() {}
+
     // Getters
     public String getAccountId() {
         return accountId;
@@ -80,5 +82,54 @@ public class AccountAndLoanDto {
 
     public double getAppliedRate() {
         return appliedRate;
+    }
+
+    // Setters
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
+    public void setAccountNo(String accountNo) {
+        this.accountNo = accountNo;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public void setClassifica(String classifica) {
+        this.classifica = classifica;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public void setOpenDate(String openDate) {
+        this.openDate = openDate;
+    }
+
+    public void setLoanId(String loanId) {
+        this.loanId = loanId;
+    }
+
+    public void setLoanAmount(double loanAmount) {
+        this.loanAmount = loanAmount;
+    }
+
+    public void setRepaymentPeriod(int repaymentPeriod) {
+        this.repaymentPeriod = repaymentPeriod;
+    }
+
+    public void setRepaymentStatus(String repaymentStatus) {
+        this.repaymentStatus = repaymentStatus;
+    }
+
+    public void setAppliedRate(double appliedRate) {
+        this.appliedRate = appliedRate;
     }
 }

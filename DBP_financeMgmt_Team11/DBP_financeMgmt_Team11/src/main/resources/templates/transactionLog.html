@@ -6,30 +6,38 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>거래 내역</h1>
-<table>
-    <thead>
-    <tr>
-        <th>거래 ID</th>
-        <th>거래 일시</th>
-        <th>거래 금액</th>
-        <th>거래 유형</th>
-        <th>잔액</th>
-        <th>계좌 ID</th>
-        <th>비고</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="transaction : ${transactions}">
-        <td th:text="${transaction.transaction_id}"></td>
-        <td th:text="${#dates.format(transaction.transaction_datetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-        <td th:text="${transaction.transaction_amount}"></td>
-        <td th:text="${transaction.transaction_type}"></td>
-        <td th:text="${transaction.balance}"></td>
-        <td th:text="${transaction.account_id}"></td>
-        <td th:text="${transaction.remarks}"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <!-- 제목 섹션 -->
+    <div class="header">
+        <h1>거래 내역</h1>
+    </div>
+
+    <!-- 테이블 섹션 -->
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>거래 일시</th>
+                <th>거래 금액</th>
+                <th>거래 유형</th>
+                <th>잔액</th>
+                <th>비고</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${#temporals.format(transaction.transactionDatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${transaction.transactionAmount}"></td>
+                <td th:text="${transaction.transactionType}"></td>
+                <td th:text="${transaction.balance}"></td>
+                <td th:text="${transaction.remarks}"></td>
+            </tr>
+            <tr th:if="${transactions.isEmpty()}">
+                <td colspan="5">거래 내역이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

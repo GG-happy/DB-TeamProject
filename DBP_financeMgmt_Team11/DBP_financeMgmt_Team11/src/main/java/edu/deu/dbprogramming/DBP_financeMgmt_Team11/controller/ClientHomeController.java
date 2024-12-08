@@ -22,19 +22,16 @@ public class ClientHomeController {
 
     private final CompanyRepository companyRepository;
     private final AccountAndLoanService accountAndLoanService;
-    private final UserService userService;
 
     public ClientHomeController(CompanyRepository companyRepository, AccountAndLoanService accountAndLoanService, UserService userService) {
         this.companyRepository = companyRepository;
         this.accountAndLoanService = accountAndLoanService;
-        this.userService = userService;
     }
 
-    @GetMapping("/client-home")
+    @GetMapping("/clientHome")
     public String myInfo(@AuthenticationPrincipal User user, Model model, HttpSession session) {
         // 로그인된 사용자 정보 가져오기
-        Map<String, Object> userinfo = userService.getUserInfo(user);
-
+        Map<String, Object> userinfo = UserService.getUserInfo(user);
         String clientCode;
         if(userinfo.get("role").equals("ROLE_bank-manager")) {
             clientCode=(String) session.getAttribute("SelectedClientCode");
@@ -47,7 +44,7 @@ public class ClientHomeController {
                 return "redirect:/"; // client_code가 없는 경우 홈으로 리다이렉션
             }
         }
-        // 사용자 이름, 타이틀, 연락처 등 가져오기
+
 
 
         // 기업 정보 가져오기
@@ -57,6 +54,7 @@ public class ClientHomeController {
         List<AccountAndLoanDto> accountAndLoanDtoList = accountAndLoanService.getAccountAndLoanDto(clientCode);
 
         // 모델에 데이터 추가
+        // 사용자 이름, 타이틀, 연락처 등 가져오기
         model.addAttribute("companyInfo", companyInfo);
         model.addAttribute("accounts", accountAndLoanDtoList);
         model.addAttribute("name", userinfo.get("name"));
@@ -79,6 +77,6 @@ public class ClientHomeController {
         }else {
             session.invalidate();
         }
-        return "redirect:/client-home";
+        return "redirect:/clientHome";
     }
 }
