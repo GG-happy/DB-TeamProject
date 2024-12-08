@@ -1,6 +1,7 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository;
 
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.AccountAndLoanDto;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -101,5 +102,106 @@ public class AccountAndLoanDao {
             throw new RuntimeException("Unexpected multiple results for accountId: " + accountId);
         }
     }
+
+    public boolean updateAccount(AccountAndLoanDto dto, String companyId) {
+        String query = """
+        UPDATE Account
+        SET 
+            account_no = ?, 
+            account_name = ?, 
+            classifica = ?, 
+            balance = ?, 
+            branch = ?, 
+            open_date = TO_DATE(?, 'YYYY-MM-DD')
+        WHERE 
+            company_id = ? 
+            AND account_id = ?
+        """;
+
+        try {
+            jdbcTemplate.update(query,
+                    dto.getAccountNo(),
+                    dto.getAccountName(),
+                    dto.getClassifica(),
+                    dto.getBalance(),
+                    dto.getBranch(),
+                    dto.getOpenDate(),
+                    companyId,
+                    dto.getAccountId()
+            );
+            return true;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateLoan(AccountAndLoanDto dto, String companyId) {
+        String query = """
+    UPDATE Loan
+    SET 
+        loan_amount = ?, 
+        repayment_period = ?, 
+        repayment_status = ?
+    WHERE loan_id = ? 
+    AND account_id = ? 
+    AND EXISTS (
+        SELECT 1 
+        FROM Account 
+        WHERE account_id = Loan.account_id 
+        AND company_id = ?
+    )
+    """;
+
+        try {
+            jdbcTemplate.update(query,
+                    dto.getLoanAmount(),     // UPDATE: loan_amount
+                    dto.getRepaymentPeriod(), // UPDATE: repayment_period
+                    dto.getRepaymentStatus(), // UPDATE: repayment_status
+                    dto.getLoanId(),         // WHERE: loan_id
+                    dto.getAccountId(),      // WHERE: account_id
+                    companyId                // EXISTS: company_id
+            );
+            return true;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateAppliedRate(AccountAndLoanDto dto, String companyId) {
+        // InterestRate 테이블의 업데이트 쿼리
+        String interestRateUpdateQuery = """
+        UPDATE InterestRate
+        SET applied_rate = ?
+        WHERE interest_id = (
+            SELECT loan_rate
+            FROM Loan
+            WHERE loan_id = ?
+              AND EXISTS (
+                  SELECT 1
+                  FROM Account a
+                  WHERE a.account_id = Loan.account_id
+                    AND a.company_id = ?
+              )
+        )
+          AND company_id = ?
+    """;
+
+        try {
+            jdbcTemplate.update(interestRateUpdateQuery,
+                    dto.getAppliedRate(), // 업데이트할 적용금리
+                    dto.getLoanId(),      // Loan의 고유 ID
+                    companyId,            // Loan과 연결된 Account의 회사 ID 확인
+                    companyId             // InterestRate와 연결된 회사 ID 확인
+            );
+            return true;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
 }

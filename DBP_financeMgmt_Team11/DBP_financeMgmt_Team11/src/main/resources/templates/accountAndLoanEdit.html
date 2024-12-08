@@ -9,7 +9,7 @@
 <body>
 <div class="edit-form">
     <h1 class="page-title-manager">계좌 및 대출 정보 편집</h1>
-    <form action="/account-loan/save" method="post">
+    <form action="/AccountAndLoanEdit/save" method="post">
         <!-- CSRF 토큰 -->
         <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
@@ -76,8 +76,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="loanRate">대출금리:</label>
-                <input type="text" id="loanRate" name="loanRate" placeholder="대출금리 입력" th:value="${accountAndLoan.appliedRate}" required>
+                <label for="loanRate">적용금리:</label>
+                <input type="text" id="loanRate" name="loanRate" placeholder="금리 입력" th:value="${accountAndLoan.appliedRate}" required>
             </div>
         </div>
 
