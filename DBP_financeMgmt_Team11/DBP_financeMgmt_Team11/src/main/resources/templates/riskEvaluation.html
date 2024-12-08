@@ -8,8 +8,8 @@
 </head>
 <body>
 <div class="edit-form">
-  <h1 class="page-title">리스크 평가 입력</h1>
-  <form action="/risk-evaluation/save" method="post">
+  <h1 class="page-title">리스크 평가 보고서</h1>
+  <form action="/RiskEvaluation/save" method="post">
     <!-- CSRF 토큰 -->
     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
@@ -27,6 +27,14 @@
       <div class="form-group">
         <label for="evaluator">평가자:</label>
         <input type="text" id="evaluator" name="evaluator" placeholder="평가자 이름 입력" required>
+      </div>
+    </div>
+
+    <div class="button-group-container">
+      <div class="button-group">
+        <button type="button" class="button button-primary" onclick="location.href='/RiskEvaluation/prev?riskId=${riskId}'">이전 보고서</button>
+        <button type="button" class="button button-primary" onclick="location.href='/RiskEvaluation/next?riskId=${riskId}'">다음 보고서</button>
+        <button type="button" class="button button-primary" onclick="location.href='/RiskEvaluation/new'">새 보고서 작성</button>
       </div>
     </div>
 
@@ -71,7 +79,8 @@
     <!-- 저장 버튼 -->
     <div class="button-group-container">
       <div class="button-group">
-        <button type="submit" class="button button-primary">저장</button>
+        <button type="button" class="button button-primary" onclick="location.href='/clientHome'">대시보드로 돌아가기</button>
+        <button type="submit" class="button button-critical">저장</button>
       </div>
     </div>
   </form>
