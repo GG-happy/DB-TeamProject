@@ -68,7 +68,9 @@ public class RiskEvaluationService {
         Riskevaluation currentRisk = currentRiskOpt.get();
 
         // 현재 데이터의 evaluation_date로 이후 데이터 조회
-        Optional<Riskevaluation> nextRiskOpt = repository.findNextRiskByDateAndCompanyId(currentRisk.getEvaluationDate(), companyId).stream().findFirst();
+        System.out.println(currentRisk.getEvaluationDate());
+        //DB의 Date에 저장되는 시간과 여기서 활용되는 0시0분0초의 차이로 인해 현재 날짜로 조회되어 +1일 후 레포지토리에서 현재날짜+1로 포함하여 사용
+        Optional<Riskevaluation> nextRiskOpt = repository.findNextRiskByDateAndCompanyId(currentRisk.getEvaluationDate().plusDays(1), companyId).stream().findFirst();
         if (nextRiskOpt.isEmpty()) {
             throw new NoSuchElementException("다음 데이터가 존재하지 않습니다.");
         }

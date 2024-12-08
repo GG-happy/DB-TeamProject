@@ -21,7 +21,7 @@ public interface RiskevaluationRepository extends JpaRepository<Riskevaluation, 
     List<Riskevaluation> findPreviousRiskByDateAndCompanyId(@Param("evaluationDate") LocalDate evaluationDate, @Param("companyId") String companyId);
 
     // 이후 데이터 (evaluation_date가 주어진 날짜보다 큰 가장 작은 값, 특정 회사)
-    @Query("SELECT r FROM Riskevaluation r WHERE r.evaluationDate > :evaluationDate AND r.company.companyId = :companyId ORDER BY r.evaluationDate ASC")
+    @Query("SELECT r FROM Riskevaluation r WHERE r.evaluationDate >= :evaluationDate AND r.company.companyId = :companyId ORDER BY r.evaluationDate ASC")
     List<Riskevaluation> findNextRiskByDateAndCompanyId(@Param("evaluationDate") LocalDate evaluationDate, @Param("companyId") String companyId);
 
     // 가장 최근의 리스크 평가 보고서 가져오기 (evaluationDate 기준 최신 데이터 1개, 특정 회사)
