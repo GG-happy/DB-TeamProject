@@ -11,6 +11,15 @@ import java.util.List;
 public interface InterestrateRepository extends JpaRepository<Interestrate, String> {
 
     /**
+     * 특정 회사의 가장 최근 이자율 조회
+     * @param companyId 회사 ID
+     * @return 가장 최근 이자율
+     */
+    Interestrate findFirstByCompanyCompanyIdOrderByEffectiveYearDesc(String companyId);
+
+    Interestrate findByInterestId(String interestId);
+
+    /**
      * 특정 회사의 이자율 목록 조회
      * @param companyId 회사 ID
      * @return 이자율 목록

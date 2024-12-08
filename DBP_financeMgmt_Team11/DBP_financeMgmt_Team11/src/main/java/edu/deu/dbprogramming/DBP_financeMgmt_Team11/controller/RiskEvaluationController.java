@@ -5,6 +5,7 @@ import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Riskevaluation;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.CompanyRepository;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.RiskEvaluationService;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.UserService;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.UtilityCodeService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -24,10 +25,12 @@ public class RiskEvaluationController {
 
     private final RiskEvaluationService riskEvaluationService;
     private final CompanyRepository companyRepository;
+    private UtilityCodeService utilityCodeService;
 
-    public RiskEvaluationController(RiskEvaluationService riskEvaluationService, CompanyRepository companyRepository) {
+    public RiskEvaluationController(RiskEvaluationService riskEvaluationService, CompanyRepository companyRepository, UtilityCodeService utilityCodeService) {
         this.riskEvaluationService = riskEvaluationService;
         this.companyRepository = companyRepository;
+        this.utilityCodeService = utilityCodeService;
     }
 
 
@@ -35,7 +38,8 @@ public class RiskEvaluationController {
     public String latestRiskEvaluation(
             @AuthenticationPrincipal User user, Model model, HttpSession session
     ) {
-        String clientCode = setupUserInfo(user, model, session);
+        String clientCode = utilityCodeService.setupUserInfo(user, model, session);
+        //String clientCode = setupUserInfo(user, model, session);
         if (clientCode == null) {
             return "redirect:/"; // client_code가 없는 경우 홈으로 리다이렉션
         }
@@ -58,7 +62,8 @@ public class RiskEvaluationController {
     public String newRiskEvaluation(
             @AuthenticationPrincipal User user, Model model, HttpSession session
     ) {
-        String clientCode = setupUserInfo(user, model, session);
+        String clientCode = utilityCodeService.setupUserInfo(user, model, session);
+        //String clientCode = setupUserInfo(user, model, session);
         if (clientCode == null) {
             return "redirect:/"; // client_code가 없는 경우 홈으로 리다이렉션
         }
@@ -74,7 +79,8 @@ public class RiskEvaluationController {
             @AuthenticationPrincipal User user, Model model, HttpSession session,
             @RequestParam(value = "nowRiskId") String riskId
     ) {
-        String clientCode = setupUserInfo(user, model, session);
+        String clientCode = utilityCodeService.setupUserInfo(user, model, session);
+        //String clientCode = setupUserInfo(user, model, session);
         if (clientCode == null) {
             return "redirect:/"; // client_code가 없는 경우 홈으로 리다이렉션
         }
@@ -101,7 +107,8 @@ public class RiskEvaluationController {
             @AuthenticationPrincipal User user, Model model, HttpSession session,
             @RequestParam(value = "nowRiskId") String riskId
     ) {
-        String clientCode = setupUserInfo(user, model, session);
+        String clientCode = utilityCodeService.setupUserInfo(user, model, session);
+        //String clientCode = setupUserInfo(user, model, session);
         if (clientCode == null) {
             return "redirect:/"; // client_code가 없는 경우 홈으로 리다이렉션
         }
@@ -128,7 +135,8 @@ public class RiskEvaluationController {
     public String saveRiskEvaluation(@AuthenticationPrincipal User user, Model model, HttpSession session,
                                      @RequestParam Map<String, String> formData){
 
-        String clientCode = setupUserInfo(user, model, session);
+        String clientCode = utilityCodeService.setupUserInfo(user, model, session);
+        //String clientCode = setupUserInfo(user, model, session);
         if (clientCode == null) {
             return "redirect:/"; // client_code가 없는 경우 홈으로 리다이렉션
         }
@@ -160,21 +168,21 @@ public class RiskEvaluationController {
 
 
 
-    /**
-     * 사용자 정보와 클라이언트 코드를 설정하는 메서드
-     */
-    private String setupUserInfo(
-            @AuthenticationPrincipal User user, Model model, HttpSession session
-    ) {
-        Map<String, Object> userinfo = UserService.getUserInfo(user);
-        String clientCode;
-        if ("ROLE_bank-manager".equals(userinfo.get("role"))) {
-            clientCode = (String) session.getAttribute("SelectedClientCode");
-            model.addAttribute("isManager", true);
-        } else {
-            clientCode = (String) userinfo.get("client_code");
-            model.addAttribute("isManager", false);
-        }
-        return clientCode;
-    }
+//    /**
+//     * 사용자 정보와 클라이언트 코드를 설정하는 메서드
+//     */
+//    private String setupUserInfo(
+//            @AuthenticationPrincipal User user, Model model, HttpSession session
+//    ) {
+//        Map<String, Object> userinfo = UserService.getUserInfo(user);
+//        String clientCode;
+//        if ("ROLE_bank-manager".equals(userinfo.get("role"))) {
+//            clientCode = (String) session.getAttribute("SelectedClientCode");
+//            model.addAttribute("isManager", true);
+//        } else {
+//            clientCode = (String) userinfo.get("client_code");
+//            model.addAttribute("isManager", false);
+//        }
+//        return clientCode;
+//    }
 }

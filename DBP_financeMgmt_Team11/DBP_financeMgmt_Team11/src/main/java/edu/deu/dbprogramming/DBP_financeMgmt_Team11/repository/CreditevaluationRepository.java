@@ -10,6 +10,13 @@ import java.util.List;
 @Repository
 public interface CreditevaluationRepository extends JpaRepository<Creditevaluation, String> {
 
+    /**
+     * 특정 회사의 가장 최근 신용평가 조회
+     * @param companyId 회사 ID
+     * @return 가장 최근 신용평가
+     */
+    Creditevaluation findFirstByCompanyCompanyIdOrderByEvaluationDateDesc(String companyId);
+
     // 특정 회사의 신용평가 목록 조회
     List<Creditevaluation> findByCompanyCompanyId(String companyId);
 

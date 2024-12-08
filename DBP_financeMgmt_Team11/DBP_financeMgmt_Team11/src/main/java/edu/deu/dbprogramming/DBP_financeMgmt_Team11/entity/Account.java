@@ -13,8 +13,9 @@ import java.time.LocalDate;
 @Table(name = "ACCOUNT")
 public class Account {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 ID를 자동 생성
     @Size(max = 20)
-    @Column(name = "ACCOUNT_ID", nullable = false, length = 20)
+    @Column(name = "ACCOUNT_ID", length = 20)
     private String accountId;
 
     @Size(max = 20)

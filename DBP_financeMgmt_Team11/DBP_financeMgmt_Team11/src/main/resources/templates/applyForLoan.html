@@ -5,11 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>대출 신청</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    function validateLoanAmount() {
+      const loanLimit = parseFloat(document.getElementById('loanLimit').value); // 대출한도 값 가져오기
+      const loanAmount = parseFloat(document.getElementById('loanAmount').value); // 대출금액 값 가져오기
+
+      // 대출금액이 대출한도를 초과하는지 확인
+      if (loanAmount > loanLimit) {
+        alert("대출금액이 대출한도를 초과할 수 없습니다!");
+        return false; // 폼 제출 방지
+      }
+      return true; // 폼 제출 허용
+    }
+  </script>
 </head>
 <body>
 <div class="edit-form">
   <h1 class="page-title">대출 신청</h1>
-  <form action="/account/save" method="post">
+  <form action="/applyForLoan/save" method="post" onsubmit="return validateLoanAmount()">
     <!-- CSRF 토큰 -->
     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
@@ -22,7 +35,10 @@
       </div>
       <div class="form-group">
         <label for="classification">분류:</label>
-        <input type="text" id="classification" name="classification" placeholder="분류 입력" required>
+        <select id="classification" name="classification" required>
+          <option value="" disabled selected>분류 선택</option>
+          <option value="대출">대출</option>
+        </select>
       </div>
       <div class="form-group">
         <label for="branch">관리점:</label>
@@ -33,6 +49,14 @@
     <!-- 대출 정보 -->
     <div class="section">
       <h2>대출 정보</h2>
+      <div class="form-group">
+        <label for="loanAmount">대출금리:</label>
+        <input type="number" id="appliedRate" name="appliedRate" placeholder="대출금리 오류" th:value="${apppliedRate}" readonly required>
+      </div>
+      <div class="form-group">
+        <label for="loanAmount">대출한도:</label>
+        <input type="number" id="loanLimit" name="loanLimit" placeholder="대출한도 오류" th:value="${loanLimit}" readonly required>
+      </div>
       <div class="form-group">
         <label for="loanAmount">대출금액:</label>
         <input type="number" id="loanAmount" name="loanAmount" placeholder="대출금액 입력" required>
@@ -46,7 +70,8 @@
     <!-- 제출 버튼 -->
     <div class="button-group-container">
       <div class="button-group">
-        <button type="submit" class="button button-primary">대출 신청</button>
+        <button type="button" class="button button-primary" onclick="location.href='/clientHome'">대시보드로 돌아가기</button>
+        <button type="submit" class="button button-critical">대출 신청</button>
       </div>
     </div>
   </form>
