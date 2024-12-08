@@ -32,8 +32,9 @@
                 <label for="classifica">분류:</label>
                 <select id="classifica" name="classifica" th:value="${accountAndLoan.classifica}" required>
                     <option value="" disabled selected>분류 선택</option>
-                    <option value="예금">예금</option>
-                    <option value="적금">적금</option>
+                    <option value="예금" th:selected="${accountAndLoan.classifica == '예금'}">예금</option>
+                    <option value="적금" th:selected="${accountAndLoan.classifica == '적금'}">적금</option>
+                    <option value="대출" th:selected="${accountAndLoan.classifica == '대출'}">대출</option>
                 </select>
             </div>
             <div class="form-group">
