@@ -6,31 +6,13 @@
     <title>은행 서비스</title>
     <link rel="stylesheet" href="/css/styles.css">
     <script>
-        // 팝업 창 열기
         function openSearchPopup() {
             const width = 1200;
             const height = 1000;
             const left = (window.innerWidth - width) / 2;
             const top = (window.innerHeight - height) / 2;
 
-            const popup = window.open('/searchCompany', '기업검색', `width=${width},height=${height},left=${left},top=${top}`);
-
-            popup.onunload = function () {
-                const companyID = popup.document.getElementById('selectedCompanyID')?.value;
-                const companyName = popup.document.getElementById('selectedCompanyName')?.value;
-
-                updateElementValue('companyID', companyID);
-                updateElementValue('companyIDWork', companyID);
-                updateElementValue('companyName', companyName);
-                updateElementValue('companyNameWork', companyName);
-            };
-        }
-
-        function updateElementValue(id, value) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.value = value;
-            }
+            window.open('/searchCompany', '기업검색', `width=${width},height=${height},left=${left},top=${top}`);
         }
 
         function validateForm(Element) {

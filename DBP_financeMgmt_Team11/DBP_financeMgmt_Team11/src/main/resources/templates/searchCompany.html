@@ -7,11 +7,12 @@
     <script>
         function selectCompany(companyID, companyName) {
             if (window.opener) {
+                // 부모 창의 특정 입력 필드 값을 업데이트
                 updateElementValue('companyID', companyID);
                 updateElementValue('companyIDWork', companyID);
                 updateElementValue('companyName', companyName);
                 updateElementValue('companyNameWork', companyName);
-                window.close();
+                window.close(); // 팝업 닫기
             } else {
                 alert("부모 창이 없습니다.");
             }
@@ -20,7 +21,9 @@
         function updateElementValue(id, value) {
             const element = window.opener.document.getElementById(id);
             if (element) {
-                element.value = value;
+                element.value = value; // 값을 설정
+            } else {
+                console.warn(`부모 창에서 ${id} 요소를 찾을 수 없습니다.`);
             }
         }
     </script>
