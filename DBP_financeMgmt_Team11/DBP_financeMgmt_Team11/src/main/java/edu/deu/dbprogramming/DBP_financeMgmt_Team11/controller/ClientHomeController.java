@@ -28,7 +28,7 @@ public class ClientHomeController {
         this.accountAndLoanService = accountAndLoanService;
     }
 
-    @GetMapping("/client-home")
+    @GetMapping("/clientHome")
     public String myInfo(@AuthenticationPrincipal User user, Model model, HttpSession session) {
         // 로그인된 사용자 정보 가져오기
         Map<String, Object> userinfo = UserService.getUserInfo(user);
@@ -77,6 +77,6 @@ public class ClientHomeController {
         }else {
             session.invalidate();
         }
-        return "redirect:/client-home";
+        return "redirect:/clientHome";
     }
 }
