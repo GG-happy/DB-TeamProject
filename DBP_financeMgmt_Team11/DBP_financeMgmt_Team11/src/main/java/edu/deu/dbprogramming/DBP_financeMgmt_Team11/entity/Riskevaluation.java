@@ -46,7 +46,6 @@ public class Riskevaluation {
     @Column(name = "CREDIBILITY", nullable = false)
     private Double credibility;
 
-    @NotNull
     @Column(name = "TOTAL_SCORE", nullable = false)
     private Double totalScore;
 

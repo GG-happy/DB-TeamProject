@@ -100,7 +100,10 @@ public class RiskEvaluationService {
         if(riskevaluation.getRiskId().equals("null")){
             riskevaluation.setRiskId(null);
         }
-        System.out.println("Save Risk ID: " + riskevaluation.getRiskId());
-        return repository.save(riskevaluation);
+        riskevaluation.setTotalScore(null); //트리거로 계산
+        System.out.println(riskevaluation.getRiskId());
+        System.out.println(riskevaluation.getCredibility());
+        repository.save(riskevaluation);
+        return riskevaluation;
     }
 }

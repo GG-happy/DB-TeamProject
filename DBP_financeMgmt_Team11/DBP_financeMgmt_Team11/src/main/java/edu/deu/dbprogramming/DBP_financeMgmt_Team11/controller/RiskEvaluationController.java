@@ -143,15 +143,16 @@ public class RiskEvaluationController {
         riskEvaluation.setOperationRisk(Double.parseDouble(formData.get("operation_risk")));
         riskEvaluation.setFinancialRisk(Double.parseDouble(formData.get("financial_risk")));
         riskEvaluation.setCredibility(Double.parseDouble(formData.get("credibility")));
-        riskEvaluation.setTotalScore(Double.parseDouble(formData.get("total_score")));
+        //riskEvaluation.setTotalScore(Double.parseDouble(formData.get("total_score")));
         riskEvaluation.setCompany(companyRepository.findByCompanyId(clientCode));
 
         try{
             Riskevaluation result=riskEvaluationService.saveRiskEvaluation(riskEvaluation);
-            model.addAttribute("status", "success");
-            model.addAttribute("risk", result);
-            return "riskEvaluation";
+            model.addAttribute("status", "success");    //안씀
+            model.addAttribute("risk", result); //안씀
+            return "redirect:/RiskEvaluation";
         }catch (Exception e){
+            e.printStackTrace();
             return "something-wrong";
         }
 
