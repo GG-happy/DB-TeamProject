@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class RiskEvaluationController {
     @GetMapping("/RiskEvaluation")
     public String RiskEvaluation() {
+
+        //TODO: DB 연동 필요
+
         return "riskEvaluation";
     }
 }

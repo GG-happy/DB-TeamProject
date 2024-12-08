@@ -8,28 +8,24 @@
     <script>
         // 팝업 창 열기
         function openSearchPopup() {
-            // 화면의 중앙 위치 계산
             const width = 1200;
             const height = 1000;
-            const left = 0;
-            const top = 0;
+            const left = (window.innerWidth - width) / 2;
+            const top = (window.innerHeight - height) / 2;
 
-            // 팝업 창 오픈
             const popup = window.open('/searchCompany', '기업검색', `width=${width},height=${height},left=${left},top=${top}`);
 
-
             popup.onunload = function () {
-                // 팝업 창에서 데이터를 선택 후 부모 창으로 전달
-                const companyID = popup.document.getElementById('selectedCompanyID').value;
-                const companyName = popup.document.getElementById('selectedCompanyName').value;
+                const companyID = popup.document.getElementById('selectedCompanyID')?.value;
+                const companyName = popup.document.getElementById('selectedCompanyName')?.value;
 
-                // 부모 창의 필드 업데이트
                 updateElementValue('companyID', companyID);
                 updateElementValue('companyIDWork', companyID);
                 updateElementValue('companyName', companyName);
                 updateElementValue('companyNameWork', companyName);
             };
         }
+
         function updateElementValue(id, value) {
             const element = document.getElementById(id);
             if (element) {
@@ -41,50 +37,59 @@
             const hiddenValue = Element.value.trim();
             if (!hiddenValue) {
                 alert("고객정보가 선택되지 않았습니다!");
-                return false; // 폼 제출 막기
+                return false;
             }
-            return true; // 유효하면 폼 제출
+            return true;
         }
-
     </script>
 </head>
 <body>
-<!-- 버튼 그룹을 블록 컨테이너로 유지 -->
-<div class="button-group">
-    <h1>은행 서비스 메인 페이지</h1>
-    <!-- 로그인 여부에 따라 버튼 표시 -->
-    <div th:if="${isAuthentication}">
-        <p>안녕하세요, <span th:text="${name}"></span> <span th:text="${title}"></span>님!</p>
-        <p>Phone: <span th:text="${phone}"></span><br>Email: <span th:text="${email}"></span></p>
-        <button onclick="location.href='/logout'">로그아웃</button>
-        <button onclick="location.href='/userInfoEdit'">회원정보 수정</button>
+<!-- 페이지 제목 -->
+<h1 class="dashboard-title">은행 서비스 메인 페이지</h1>
+
+<!-- 사용자 인증 여부에 따른 버튼 그룹 -->
+<div class="button-group-container">
+    <div class="button-group">
+        <div th:if="${isAuthentication}">
+            <p>안녕하세요, <span th:text="${name}"></span> <span th:text="${title}"></span>님!</p>
+            <p>Phone: <span th:text="${phone}"></span><br>Email: <span th:text="${email}"></span></p>
+            <button class="button button-secondary" onclick="location.href='/logout'">로그아웃</button>
+            <button class="button button-secondary" onclick="location.href='/userInfoEdit'">회원정보 수정</button>
+        </div>
+        <div th:if="${!isAuthentication}">
+            <button class="button button-secondary" onclick="location.href='/login'">로그인</button>
+            <button class="button button-secondary" onclick="location.href='/signup'">회원가입</button>
+        </div>
     </div>
-    <div th:if="${!isAuthentication}">
-        <button onclick="location.href='/login'">로그인</button>
-        <button onclick="location.href='/signup'">회원가입</button>
-    </div>
-    <div th:if="${isAuthentication}">
+</div>
+
+<!-- 고객 또는 관리자 버튼 -->
+<div class="button-group-container" th:if="${isAuthentication}">
+    <div class="button-group">
         <div th:if="${isManager}">
             <form action="/workingToClient" method="post" onsubmit="return validateForm(companyIDWork)">
-                <button type="button" onclick="openSearchPopup()">고객정보 선택하기</button>
-                <input type="hidden" id="companyIDWork" name="companyIDWork" readonly required>
-                <input type="text" id="companyNameWork" name="companyNameWork" placeholder="아직 선택되지 않았습니다" readonly>
-                <input type="hidden" name="_csrf" value="${_csrf.token}">
-                <button type="submit">업무페이지로 이동</button>
+                <div class="form-group">
+                    <button type="button" class="button button-secondary" onclick="openSearchPopup()">고객정보 선택하기</button>
+                    <input type="hidden" id="companyIDWork" name="companyIDWork" readonly required>
+                    <input type="text" id="companyNameWork" name="companyNameWork" placeholder="아직 선택되지 않았습니다" readonly>
+                    <input type="hidden" name="_csrf" value="${_csrf.token}">
+                    <button type="submit" class="button button-primary">업무페이지로 이동</button>
+                </div>
             </form>
         </div>
         <div th:if="${!isManager}">
-            <button onclick="location.href='/client-home'" th:if="${isClientLinked}">은행뱅킹</button>
+            <button class="button button-primary" onclick="location.href='/client-home'" th:if="${isClientLinked}">은행뱅킹</button>
             <form th:if="${!isClientLinked}" action="/connectClientCode" method="post" onsubmit="return validateForm(companyID)">
-                <button type="button" onclick="openSearchPopup()">고객정보 선택하기</button>
-                <input type="hidden" id="companyID" name="companyID" readonly required>
-                <input type="text" id="companyName" name="companyName" placeholder="아직 선택되지 않았습니다" readonly>
-                <input type="hidden" name="_csrf" value="${_csrf.token}">
-                <button type="submit">고객정보 저장하기</button>
+                <div class="form-group">
+                    <button type="button" class="button button-secondary" onclick="openSearchPopup()">고객정보 선택하기</button>
+                    <input type="hidden" id="companyID" name="companyID" readonly required>
+                    <input type="text" id="companyName" name="companyName" placeholder="아직 선택되지 않았습니다" readonly>
+                    <input type="hidden" name="_csrf" value="${_csrf.token}">
+                    <button type="submit" class="button button-primary">고객정보 저장하기</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
 </body>
-
 </html>

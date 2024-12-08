@@ -1,6 +1,9 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository;
 
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Account;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Company;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Transaction;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +13,7 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
 
+    List<Transaction> findByAccountOrderByTransactionDatetimeDesc(@NotNull Account account);
     /**
      * 특정 계좌와 연결된 거래 목록 조회
      * @param accountId 계좌 ID

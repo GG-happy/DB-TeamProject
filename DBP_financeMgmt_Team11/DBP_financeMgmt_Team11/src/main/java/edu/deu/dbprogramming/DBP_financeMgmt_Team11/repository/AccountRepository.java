@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, String> {
 
+    Account findByCompanyCompanyIdAndAccountId(String companyId , String accountId);
+
     // 특정 회사의 모든 계좌를 가져오기
     List<Account> findByCompanyCompanyId(String companyId);
 
