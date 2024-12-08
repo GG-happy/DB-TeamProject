@@ -11,11 +11,15 @@ public class AccountAndLoanService {
 
     private final AccountAndLoanDao accountAndLoanDao;
 
-    public AccountAndLoanService(AccountAndLoanDao accountAndLoanDao) {
+    private AccountAndLoanService(AccountAndLoanDao accountAndLoanDao) {
         this.accountAndLoanDao = accountAndLoanDao;
     }
 
     public List<AccountAndLoanDto> getAccountAndLoanDto(String companyId) {
         return accountAndLoanDao.getAccountAndLoanInfo(companyId);
+    }
+
+    public AccountAndLoanDto getAccountAndLoanDto(String companyId, String AccountId) {
+        return accountAndLoanDao.getAccountAndLoanInfo(companyId, AccountId);
     }
 }
