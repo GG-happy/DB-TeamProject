@@ -11,17 +11,18 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "LOAN")
 public class Loan {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 ID를 자동 생성
     @Size(max = 20)
-    @Column(name = "LOAN_ID", nullable = false, length = 20)
+    @Column(name = "LOAN_ID", length = 20)
     private String loanId;
 
     @NotNull
     @Column(name = "LOAN_AMOUNT", nullable = false)
-    private Long loanAmount;
+    private Double loanAmount;
 
     @NotNull
     @Column(name = "REPAYMENT_PERIOD", nullable = false)
-    private Long repaymentPeriod;
+    private Double repaymentPeriod;
 
     @Size(max = 20)
     @NotNull
@@ -48,19 +49,19 @@ public class Loan {
         this.loanId = loanId;
     }
 
-    public Long getLoanAmount() {
+    public Double getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(Long loanAmount) {
+    public void setLoanAmount(Double loanAmount) {
         this.loanAmount = loanAmount;
     }
 
-    public Long getRepaymentPeriod() {
+    public Double getRepaymentPeriod() {
         return repaymentPeriod;
     }
 
-    public void setRepaymentPeriod(Long repaymentPeriod) {
+    public void setRepaymentPeriod(Double repaymentPeriod) {
         this.repaymentPeriod = repaymentPeriod;
     }
 
