@@ -81,16 +81,29 @@ public class UserService {
 
     public static boolean updateUser(Map<String, Object> userMap) {
         try {
-            if (userMap.get("passwordEdit") == null || ((String) userMap.get("passwordEdit")).isEmpty()) {
-                userMap.put("passwordEdit", getUserInfo((String) userMap.get("original_username")));
+            //ID 수정 여부 확인
+            // 비밀번호 수정 여부 확인
+            if (userMap.get("passwordEdit") == null || ((String) userMap.get("passwordEdit")).trim().isEmpty()) {
+                // 기존 비밀번호 가져오기
+                Map<String, Object> userInfo = getUserInfo((String) userMap.get("original_username"));
+                if (userInfo.get("password") == null) {
+                    throw new IllegalStateException("기존 사용자 정보를 찾을 수 없습니다."); // 예외 처리
+                }
+                userMap.put("passwordEdit", userInfo.get("password")); // 기존 비밀번호 유지
+            } else {
+                // 새 비밀번호 암호화
+                userMap.put("passwordEdit", passwordEncoder.encode(userMap.get("passwordEdit").toString()));
             }
-            userMap.put("passwordEdit", passwordEncoder.encode(userMap.get("passwordEdit").toString()));
-            return userDao.addUser(userMap);
+
+            // 사용자 정보 업데이트
+            return userDao.updateUser(userMap);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
+
 
     public static boolean updateClientCode(String username, String clientCode) {
         try {

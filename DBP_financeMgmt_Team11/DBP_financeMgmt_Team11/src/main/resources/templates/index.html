@@ -46,13 +46,16 @@
 <body>
 <!-- 페이지 제목 -->
 <h1 class="dashboard-title">은행 서비스 메인 페이지</h1>
+<div th:if="${isAuthentication}">
+    <p>안녕하세요, <span th:text="${name}"></span> <span th:text="${title}"></span>님!</p>
+    <p>Phone: <span th:text="${phone}"></span><br>Email: <span th:text="${email}"></span></p>
+</div>
 
 <!-- 사용자 인증 여부에 따른 버튼 그룹 -->
 <div class="button-group-container">
     <div class="button-group">
         <div th:if="${isAuthentication}">
-            <p>안녕하세요, <span th:text="${name}"></span> <span th:text="${title}"></span>님!</p>
-            <p>Phone: <span th:text="${phone}"></span><br>Email: <span th:text="${email}"></span></p>
+
             <button class="button button-secondary" onclick="location.href='/logout'">로그아웃</button>
             <button class="button button-secondary" onclick="location.href='/userInfoEdit'">회원정보 수정</button>
         </div>
@@ -61,11 +64,7 @@
             <button class="button button-secondary" onclick="location.href='/signup'">회원가입</button>
         </div>
     </div>
-</div>
-
-<!-- 고객 또는 관리자 버튼 -->
-<div class="button-group-container" th:if="${isAuthentication}">
-    <div class="button-group">
+    <div class="button-group" th:if="${isAuthentication}">
         <div th:if="${isManager}">
             <form action="/workingToClient" method="post" onsubmit="return validateForm(companyIDWork)">
                 <div class="form-group">

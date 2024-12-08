@@ -1,66 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${page_title}"></title>
+    <title th:text="${page_title}">사용자 관리</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="text-center"><span th:text="${page_title}"></span></h2>
+<div class="edit-form">
+    <h1 class="page-title" th:text="${page_title}">사용자 관리</h1>
     <form id="userForm" action="/userRegister" method="post" onsubmit="return validateForm()">
-        <div class="mb-3">
-            <label for="username" class="form-label">아이디</label>
-            <input type="text" class="form-control" id="username" name="username" th:value="${username}" required>
-        </div>
-        <div class="mb-3" th:if="${isSignUp}">
-            <label for="password" class="form-label">비밀번호</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" required>
-            <input type="password" class="form-control" id="passwordCheck" name="passwordCheck" placeholder="비밀번호 확인" required>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
+        <!-- 사용자 정보 입력 -->
+        <div class="section">
+            <h2>회원 정보</h2>
+            <div class="form-group">
+                <label for="username">아이디</label>
+                <input type="text" class="form-control" id="username" name="username" th:value="${username}" required>
+            </div>
+            <div class="form-group" th:if="${isSignUp}">
+                <label for="password">비밀번호</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" required>
+            </div>
+            <div class="form-group" th:if="${isSignUp}">
+                <label for="password">비밀번호 확인</label>
+                <input type="password" class="form-control mt-2" id="passwordCheck" name="passwordCheck" placeholder="비밀번호 확인" required>
+            </div>
             <div id="passwordError" class="text-danger mt-1" style="display: none;">비밀번호가 일치하지 않습니다.</div>
-        </div>
-        <div class="mb-3" th:if="${!isSignUp}">
-            <label for="passwordEdit" class="form-label">비밀번호 수정</label>
-            <input type="password" class="form-control" id="passwordEdit" name="passwordEdit" placeholder="수정안함">
-            <input type="password" class="form-control" id="passwordEditCheck" name="passwordEditCheck" placeholder="비밀번호 확인">
+            <div class="form-group" th:if="${!isSignUp}">
+                <label for="passwordEdit">비밀번호 수정</label>
+                <input type="password" class="form-control" id="passwordEdit" name="passwordEdit" placeholder="수정안함">
+            </div>
+            <div class="form-group" th:if="${!isSignUp}">
+                <label for="passwordEdit">비밀번호 수정확인</label>
+                <input type="password" class="form-control mt-2" id="passwordEditCheck" name="passwordEditCheck" placeholder="비밀번호 수정확인">
+            </div>
             <div id="passwordEditError" class="text-danger mt-1" style="display: none;">비밀번호가 일치하지 않습니다.</div>
         </div>
-        <div class="mb-3">
-            <label for="name" class="form-label">성명</label>
-            <input type="text" class="form-control" id="name" name="name" th:value="${name}" required>
-        </div>
-        <div class="mb-3">
-            <label for="title" class="form-label">호칭</label>
-            <input type="text" class="form-control" id="title" name="title" th:value="${title}" required>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">이메일</label>
-            <input type="email" class="form-control" id="email" name="email" th:value="${email}" required>
-        </div>
-        <div class="mb-3">
-            <label for="phone" class="form-label">전화번호</label>
-            <input type="tel" class="form-control" id="phone" name="phone" th:value="${phone}" required>
-        </div>
-        <div class="mb-3">
-            <label for="role" class="form-label">구분</label>
-            <select class="form-select" id="role" name="role" required>
-                <option value="ROLE_client-corporate" th:selected="${role == 'ROLE_client-corporate'}">기업</option>
-                <option value="ROLE_client-private" th:selected="${role == 'ROLE_client-private'}">개인</option>
-                <option value="ROLE_bank-manager" th:selected="${role == 'ROLE_bank-manager'}">은행직원 업무용</option>
-            </select>
+
+        <!-- 추가 사용자 정보 -->
+        <div class="section">
+            <h2>개인 정보</h2>
+            <div class="form-group">
+                <label for="name">성명</label>
+                <input type="text" class="form-control" id="name" name="name" th:value="${name}" required>
+            </div>
+            <div class="form-group">
+                <label for="title">호칭</label>
+                <input type="text" class="form-control" id="title" name="title" th:value="${title}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input type="email" class="form-control" id="email" name="email" th:value="${email}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">전화번호</label>
+                <input type="tel" class="form-control" id="phone" name="phone" th:value="${phone}" required>
+            </div>
+            <div class="form-group">
+                <label for="role">구분</label>
+                <select class="form-select" id="role" name="role" required>
+                    <option value="ROLE_client-corporate" th:selected="${role == 'ROLE_client-corporate'}">기업</option>
+                    <option value="ROLE_client-private" th:selected="${role == 'ROLE_client-private'}">개인</option>
+                    <option value="ROLE_bank-manager" th:selected="${role == 'ROLE_bank-manager'}">은행직원 업무용</option>
+                </select>
+            </div>
         </div>
 
+        <!-- 숨겨진 필드 -->
         <input type="hidden" name="isSignUp" th:value="${isSignUp}">
         <input type="hidden" name="original_username" th:value="${username}">
-        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-        <button type="submit" class="btn btn-primary w-100"><span th:text="${submit_button}"></span></button>
+
+        <!-- 제출 버튼 -->
+        <div class="button-group-container">
+            <div class="button-group">
+                <button type="submit" class="button button-primary w-100"><span th:text="${submit_button}"></span></button>
+            </div>
+        </div>
     </form>
 </div>
 
 <script>
-    // 비밀번호 일치 확인 함수
+    // 비밀번호 확인
     function validateForm() {
         const isSignUp = document.querySelector('input[name="isSignUp"]').value === 'true';
 
