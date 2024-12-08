@@ -1,6 +1,8 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.controller;
 
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Company;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.UserRepository;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.CompanyService;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,12 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 @Controller
 public class SignUpController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CompanyService companyService;
 
     @GetMapping("/userInfoEdit")
     public String myInfo(@AuthenticationPrincipal User user, Model model) {
@@ -27,6 +33,9 @@ public class SignUpController {
         Map<String, Object> userinfo= UserService.getUserInfo(username);
         //userinfo.get("name");
 
+        //기업 리스트 가져오기
+        List<Company> companies = companyService.getAllCompanies();
+
         // 모델에 사용자 이름 추가
         model.addAttribute("username", username);
         model.addAttribute("name", userinfo.get("name"));
@@ -34,6 +43,7 @@ public class SignUpController {
         model.addAttribute("phone", userinfo.get("phone"));
         model.addAttribute("email", userinfo.get("email"));
         model.addAttribute("role", userinfo.get("role"));
+        model.addAttribute("companies", companies);
 
         model.addAttribute("page_title", "회원정보 수정");
         model.addAttribute("submit_button", "수정");
@@ -57,6 +67,7 @@ public class SignUpController {
     @PostMapping("/userRegister")
     public String handleRegisterForm(
             @RequestParam String username,
+            @RequestParam(required = false) String companyId,
             @RequestParam(required = false) String password,
             @RequestParam(required = false) String passwordCheck,
             @RequestParam(required = false) String passwordEdit,
@@ -66,6 +77,7 @@ public class SignUpController {
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String phone,
             @RequestParam String role,
+            @RequestParam(required = false) String company,
             @RequestParam boolean isSignUp,
             @RequestParam(required = false) String original_username,
             Model model
@@ -73,11 +85,13 @@ public class SignUpController {
         // 입력된 데이터 출력 (디버깅용)
         System.out.printf("아이디: %s, 비밀번호: %s, 비밀번호 수정: %s 이름: %s, 이메일: %s, 전화번호: %s, 구분: %s%n",
                 username, password, passwordEdit, name, email, phone, role);
+        System.out.println("선택된 기업 ID: " + company);
 
         // 데이터 처리 로직 (예: DB 저장)
         // userService.saveOrUpdateUser(...);
         Map<String, Object> userMap= new HashMap<>();
         userMap.put("username", username);
+        userMap.put("companyId", companyId);
         userMap.put("password", password);
         userMap.put("passwordCheck", passwordCheck);
         userMap.put("passwordEdit", passwordEdit);
@@ -108,8 +122,5 @@ public class SignUpController {
                 return "something-wrong";
             }
         }
-
-
     }
-
 }
