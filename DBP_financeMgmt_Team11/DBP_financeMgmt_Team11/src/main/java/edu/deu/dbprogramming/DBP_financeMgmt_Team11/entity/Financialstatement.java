@@ -11,8 +11,8 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Financialstatement {
     @Id
     @Size(max = 20)
-    @Column(name = "SATEMENT_ID", nullable = false, length = 20)
-    private String satementId;
+    @Column(name = "STATEMENT_ID", nullable = false, length = 20)
+    private String statementId;
 
     @Size(max = 20)
     @NotNull
@@ -47,11 +47,11 @@ public class Financialstatement {
     private Company company;
 
     public String getSatementId() {
-        return satementId;
+        return statementId;
     }
 
     public void setSatementId(String satementId) {
-        this.satementId = satementId;
+        this.statementId = satementId;
     }
 
     public String getQuarter() {

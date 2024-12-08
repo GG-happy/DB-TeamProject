@@ -89,31 +89,31 @@
             <h2>재무제표 정보</h2>
             <div class="form-group">
                 <label for="annualRevenue">연매출:</label>
-                <input type="number" id="annualRevenue" name="annualRevenue" placeholder="연매출 입력" required>
+                <input type="number" id="annualRevenue" name="annualRevenue" placeholder="연매출 입력" th:value="${financial_statement?.AnnualRevenue ?:''}" required>
             </div>
             <div class="form-group">
                 <label for="debtAmount">부채금액:</label>
-                <input type="number" id="debtAmount" name="debtAmount" placeholder="부채금액 입력" required>
+                <input type="number" id="debtAmount" name="debtAmount" placeholder="부채금액 입력" th:value="${financial_statement?.debtAmount ?:''}" required>
             </div>
             <div class="form-group">
                 <label for="netProfit">순이익:</label>
-                <input type="number" id="netProfit" name="netProfit" placeholder="순이익 입력" required>
+                <input type="number" id="netProfit" name="netProfit" placeholder="순이익 입력" th:value="${financial_statement?.netProfit ?:''}" required>
             </div>
             <div class="form-group">
                 <label for="totalAssets">총 자산:</label>
-                <input type="number" id="totalAssets" name="totalAssets" placeholder="총 자산 입력" required>
+                <input type="number" id="totalAssets" name="totalAssets" placeholder="총 자산 입력" th:value="${financial_statement?.totalAssets ?:''}" required>
             </div>
             <div class="form-group">
                 <label for="currentAssets">유동자산:</label>
-                <input type="number" id="currentAssets" name="currentAssets" placeholder="유동자산 입력" required>
+                <input type="number" id="currentAssets" name="currentAssets" placeholder="유동자산 입력" th:value="${financial_statement?.currentAssets ?:''}" required>
             </div>
             <div class="form-group">
                 <label for="fixedAssets">고정자산:</label>
-                <input type="number" id="fixedAssets" name="fixedAssets" placeholder="고정자산 입력" required>
+                <input type="number" id="fixedAssets" name="fixedAssets" placeholder="고정자산 입력" th:value="${financial_statement?.fixedAssets ?:''}" required>
             </div>
             <div class="form-group">
                 <label for="totalCost">총비용:</label>
-                <input type="number" id="totalCost" name="totalCost" placeholder="총비용 입력" required>
+                <input type="number" id="totalCost" name="totalCost" placeholder="총비용 입력" th:value="${financial_statement?.totalCost ?:''}" required>
             </div>
         </div>
 

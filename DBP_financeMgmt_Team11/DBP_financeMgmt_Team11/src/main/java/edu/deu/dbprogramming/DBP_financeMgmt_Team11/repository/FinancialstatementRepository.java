@@ -1,5 +1,6 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository;
 
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Company;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Financialstatement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface FinancialstatementRepository extends JpaRepository<Financialstatement, String> {
+
+    Financialstatement findByQuarterAndCompany(String quarter , Company company);
 
     /**
      * 특정 회사의 재무제표 목록 조회
