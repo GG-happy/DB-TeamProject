@@ -28,27 +28,27 @@ public class Riskevaluation {
 
     @NotNull
     @Column(name = "INDUSTRY_RISK", nullable = false)
-    private Long industryRisk;
+    private Double industryRisk;
 
     @NotNull
     @Column(name = "MANAGEMENT_RISK", nullable = false)
-    private Long managementRisk;
+    private Double managementRisk;
 
     @NotNull
     @Column(name = "OPERATION_RISK", nullable = false)
-    private Long operationRisk;
+    private Double operationRisk;
 
     @NotNull
     @Column(name = "FINANCIAL_RISK", nullable = false)
-    private Long financialRisk;
+    private Double financialRisk;
 
     @NotNull
     @Column(name = "CREDIBILITY", nullable = false)
-    private Long credibility;
+    private Double credibility;
 
     @NotNull
     @Column(name = "TOTAL_SCORE", nullable = false)
-    private Long totalScore;
+    private Double totalScore;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -80,51 +80,51 @@ public class Riskevaluation {
         this.evaluator = evaluator;
     }
 
-    public Long getIndustryRisk() {
+    public Double getIndustryRisk() {
         return industryRisk;
     }
 
-    public void setIndustryRisk(Long industryRisk) {
+    public void setIndustryRisk(Double industryRisk) {
         this.industryRisk = industryRisk;
     }
 
-    public Long getManagementRisk() {
+    public Double getManagementRisk() {
         return managementRisk;
     }
 
-    public void setManagementRisk(Long managementRisk) {
+    public void setManagementRisk(Double managementRisk) {
         this.managementRisk = managementRisk;
     }
 
-    public Long getOperationRisk() {
+    public Double getOperationRisk() {
         return operationRisk;
     }
 
-    public void setOperationRisk(Long operationRisk) {
+    public void setOperationRisk(Double operationRisk) {
         this.operationRisk = operationRisk;
     }
 
-    public Long getFinancialRisk() {
+    public Double getFinancialRisk() {
         return financialRisk;
     }
 
-    public void setFinancialRisk(Long financialRisk) {
+    public void setFinancialRisk(Double financialRisk) {
         this.financialRisk = financialRisk;
     }
 
-    public Long getCredibility() {
+    public Double getCredibility() {
         return credibility;
     }
 
-    public void setCredibility(Long credibility) {
+    public void setCredibility(Double credibility) {
         this.credibility = credibility;
     }
 
-    public Long getTotalScore() {
+    public Double getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(Long totalScore) {
+    public void setTotalScore(Double totalScore) {
         this.totalScore = totalScore;
     }
 

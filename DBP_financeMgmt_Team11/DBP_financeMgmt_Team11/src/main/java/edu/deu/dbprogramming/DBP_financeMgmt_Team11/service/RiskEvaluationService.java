@@ -97,6 +97,10 @@ public class RiskEvaluationService {
      */
     public Riskevaluation saveRiskEvaluation(Riskevaluation riskevaluation) {
         // 새로 저장 시 PK는 DB에서 생성되므로 riskId는 null이어야 함
+        if(riskevaluation.getRiskId().equals("null")){
+            riskevaluation.setRiskId(null);
+        }
+        System.out.println("Save Risk ID: " + riskevaluation.getRiskId());
         return repository.save(riskevaluation);
     }
 }
