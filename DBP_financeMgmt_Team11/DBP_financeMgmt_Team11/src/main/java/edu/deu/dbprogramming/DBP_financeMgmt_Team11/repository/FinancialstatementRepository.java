@@ -11,12 +11,12 @@ import java.util.List;
 public interface FinancialstatementRepository extends JpaRepository<Financialstatement, String> {
 
     Financialstatement findByQuarterAndCompany(String quarter , Company company);
-
     /**
      * 특정 회사의 재무제표 목록 조회
      * @param companyId 회사 ID
      * @return 재무제표 목록
      */
+
     List<Financialstatement> findByCompanyCompanyId(String companyId);
 
     /**

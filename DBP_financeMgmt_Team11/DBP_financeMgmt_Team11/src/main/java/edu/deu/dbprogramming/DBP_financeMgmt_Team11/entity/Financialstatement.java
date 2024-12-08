@@ -11,7 +11,8 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Financialstatement {
     @Id
     @Size(max = 20)
-    @Column(name = "STATEMENT_ID", nullable = false, length = 20)
+    @Column(name = "STATEMENT_ID",length = 20)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String statementId;
 
     @Size(max = 20)
