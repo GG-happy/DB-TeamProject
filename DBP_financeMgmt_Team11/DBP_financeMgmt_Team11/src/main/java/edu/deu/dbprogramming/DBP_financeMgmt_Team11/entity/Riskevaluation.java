@@ -12,8 +12,9 @@ import java.time.LocalDate;
 @Table(name = "RISKEVALUATION")
 public class Riskevaluation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 ID를 자동 생성
     @Size(max = 20)
-    @Column(name = "RISK_ID", nullable = false, length = 20)
+    @Column(name = "RISK_ID", length = 20)
     private String riskId;
 
     @NotNull
