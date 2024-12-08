@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>재무제표 편집</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        function sendQuery() {
+            // 선택된 연도와 분기 값을 가져옵니다.
+            const year = document.getElementById('year').value;
+            const quarter = document.getElementById('quarter').value;
+
+            // 값이 없는 경우 경고창 표시
+            if (!year || !quarter) {
+                alert('연도와 분기를 선택해주세요.');
+                return;
+            }
+
+            // GET 요청을 보냄
+            const url = `/FinancialStatementEdit?year=${year}&quarter=${quarter}`;
+            window.location.href = url;
+        }
+
+        // 페이지가 로드된 후 이벤트 리스너를 등록합니다.
+        document.addEventListener("DOMContentLoaded", () => {
+            const yearSelect = document.getElementById("year");
+            const quarterSelect = document.getElementById("quarter");
+
+            // 변경 이벤트 리스너를 추가
+            const triggerAction = () => {
+                const year = yearSelect.value;
+                const quarter = quarterSelect.value;
+
+                // 연도와 분기가 모두 선택된 경우 GET 요청을 보냅니다.
+                if (year && quarter) {
+                    const url = `/FinancialStatementEdit?year=${year}&quarter=${quarter}`;
+                    window.location.href = url; // GET 요청 실행
+                }
+            };
+
+            // 각 select 요소에 change 이벤트 리스너 등록
+            yearSelect.addEventListener("change", triggerAction);
+            quarterSelect.addEventListener("change", triggerAction);
+        });
+    </script>
 </head>
 <body>
 <div class="edit-form">
@@ -15,26 +54,34 @@
 
         <!-- 연도 및 분기 선택 -->
         <div class="section">
-            <h2>기본 정보</h2>
+            <h2>분기 정보</h2>
             <div class="form-group">
                 <label for="year">연도:</label>
                 <select id="year" name="year" required>
                     <option value="" disabled selected>연도 선택</option>
                     <th:block th:each="year : ${years}">
-                        <option th:value="${year}" th:text="${year}"></option>
+                        <option th:value="${year}" th:text="${year}" th:selected="${select_year == #strings.toString(year)}"></option>
                     </th:block>
                 </select>
+
+
             </div>
             <div class="form-group">
                 <label for="quarter">분기:</label>
                 <select id="quarter" name="quarter" required>
                     <option value="" disabled selected>분기 선택</option>
-                    <option value="Q1">1분기</option>
-                    <option value="Q2">2분기</option>
-                    <option value="Q3">3분기</option>
-                    <option value="Q4">4분기</option>
+                    <option value="Q1" th:selected="${select_quarter=='Q1'}">1분기</option>
+                    <option value="Q2" th:selected="${select_quarter=='Q2'}">2분기</option>
+                    <option value="Q3" th:selected="${select_quarter=='Q3'}">3분기</option>
+                    <option value="Q4" th:selected="${select_quarter=='Q4'}">4분기</option>
                 </select>
             </div>
+<!--            <div class="button-group-container">-->
+<!--                <div class="button-group">-->
+<!--                    &lt;!&ndash; 조회 버튼 &ndash;&gt;-->
+<!--                    <button type="button" class="button button-primary" onclick="sendQuery()">조회</button>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
 
         <!-- 재무제표 입력 -->
