@@ -1,80 +1,143 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>리스크 평가 입력</title>
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리스크 평가 입력</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        // 점수 변경 시 총점 업데이트 함수
+        function updateTotalScore() {
+            const industryRisk = parseFloat(document.getElementById('industry_risk').value) || 0;
+            const managementRisk = parseFloat(document.getElementById('management_risk').value) || 0;
+            const operationRisk = parseFloat(document.getElementById('operation_risk').value) || 0;
+            const financialRisk = parseFloat(document.getElementById('financial_risk').value) || 0;
+            const credibility = parseFloat(document.getElementById('credibility').value) || 0;
+
+            const totalScore = industryRisk + managementRisk + operationRisk + financialRisk + credibility;
+
+            document.getElementById('total_score').value = totalScore.toFixed(2); // 총점을 소수점 2자리로 반올림
+        }
+    </script>
 </head>
 <body>
 <div class="edit-form">
-  <h1 class="page-title">리스크 평가 입력</h1>
-  <form action="/risk-evaluation/save" method="post">
-    <!-- CSRF 토큰 -->
-    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <h1 class="page-title">리스크 평가 보고서</h1>
+    <form action="/RiskEvaluation/save" method="post">
+        <!-- CSRF 토큰 -->
+        <input type="hidden" name="_csrf" th:value="${_csrf?.token ?: ''}">
 
-    <!-- 평가 기본 정보 -->
-    <div class="section">
-      <h2>평가 기본 정보</h2>
-      <div class="form-group">
-        <label for="risk_id">리스크 평가 코드:</label>
-        <input type="text" id="risk_id" name="risk_id" placeholder="평가 코드 입력" required>
-      </div>
-      <div class="form-group">
-        <label for="evaluation_date">평가 날짜:</label>
-        <input type="date" id="evaluation_date" name="evaluation_date" required>
-      </div>
-      <div class="form-group">
-        <label for="evaluator">평가자:</label>
-        <input type="text" id="evaluator" name="evaluator" placeholder="평가자 이름 입력" required>
-      </div>
-    </div>
+        <!-- 평가 기본 정보 -->
+        <div class="section">
+            <h2>평가 기본 정보</h2>
+            <div class="form-group">
+<!--                <label for="risk_id">리스크 평가 코드:</label>-->
+                <input type="text" id="risk_id" name="risk_id" placeholder="평가 코드 입력" th:value="${risk?.riskId ?: ''}"
+                       required hidden>
+            </div>
+            <div class="form-group">
+                <label for="evaluation_date">평가 날짜:</label>
+                <input type="date" id="evaluation_date" name="evaluation_date" th:value="${risk?.evaluationDate ?: ''}"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="evaluator">평가자:</label>
+                <input type="text" id="evaluator" name="evaluator" placeholder="평가자 이름 입력"
+                       th:value="${risk?.evaluator ?: ''}" required>
+            </div>
+        </div>
 
-    <!-- 리스크 점수 -->
-    <div class="section">
-      <h2>리스크 점수</h2>
-      <div class="form-group">
-        <label for="industry_risk">산업 위험:</label>
-        <input type="number" id="industry_risk" name="industry_risk" placeholder="0~100 점수 입력" required>
-      </div>
-      <div class="form-group">
-        <label for="management_risk">경영 위험:</label>
-        <input type="number" id="management_risk" name="management_risk" placeholder="0~100 점수 입력" required>
-      </div>
-      <div class="form-group">
-        <label for="operation_risk">영업 위험:</label>
-        <input type="number" id="operation_risk" name="operation_risk" placeholder="0~100 점수 입력" required>
-      </div>
-      <div class="form-group">
-        <label for="financial_risk">재무 위험:</label>
-        <input type="number" id="financial_risk" name="financial_risk" placeholder="0~100 점수 입력" required>
-      </div>
-      <div class="form-group">
-        <label for="credibility">신뢰성:</label>
-        <input type="number" id="credibility" name="credibility" placeholder="0~100 점수 입력" required>
-      </div>
-      <div class="form-group">
-        <label for="total_score">총점:</label>
-        <input type="number" id="total_score" name="total_score" placeholder="총점 입력" required>
-      </div>
-    </div>
+      <div class="button-group-container">
+        <div class="button-group">
+          <!-- 이전 보고서 버튼 -->
+          <button
+                  type="button"
+                  class="button button-primary"
+                  th:attr="onclick=|location.href='/RiskEvaluation/prev?nowRiskId=${risk.riskId}'|">
+            이전 보고서
+          </button>
 
-    <!-- 기업 정보 -->
-    <div class="section">
-      <h2>기업 정보</h2>
-      <div class="form-group">
-        <label for="company_id">기업 코드:</label>
-        <input type="text" id="company_id" name="company_id" placeholder="기업 코드 입력" required>
-      </div>
-    </div>
+          <!-- 다음 보고서 버튼 -->
+          <button
+                  type="button"
+                  class="button button-primary"
+                  th:attr="onclick=|location.href='/RiskEvaluation/next?nowRiskId=${risk.riskId}'|">
+            다음 보고서
+          </button>
 
-    <!-- 저장 버튼 -->
-    <div class="button-group-container">
-      <div class="button-group">
-        <button type="submit" class="button button-primary">저장</button>
+          <!-- 새 보고서 작성 버튼 -->
+          <button
+                  type="button"
+                  class="button button-primary"
+                  onclick="location.href='/RiskEvaluation/new'">
+            새 보고서 작성
+          </button>
+        </div>
       </div>
-    </div>
-  </form>
+
+
+
+
+
+
+        <!-- 리스크 점수 -->
+        <div class="section">
+            <h2>리스크 점수</h2>
+            <div class="form-group">
+                <label for="industry_risk">산업 위험:</label>
+                <input type="number" id="industry_risk" name="industry_risk" placeholder="0~100 점수 입력"
+                       oninput="updateTotalScore()" th:value="${risk?.industryRisk ?: ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="management_risk">경영 위험:</label>
+                <input type="number" id="management_risk" name="management_risk" placeholder="0~100 점수 입력"
+                       oninput="updateTotalScore()" th:value="${risk?.managementRisk ?: ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="operation_risk">영업 위험:</label>
+                <input type="number" id="operation_risk" name="operation_risk" placeholder="0~100 점수 입력"
+                       oninput="updateTotalScore()" th:value="${risk?.operationRisk ?: ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="financial_risk">재무 위험:</label>
+                <input type="number" id="financial_risk" name="financial_risk" placeholder="0~100 점수 입력"
+                       oninput="updateTotalScore()" th:value="${risk?.financialRisk ?: ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="credibility">신뢰성:</label>
+                <input type="number" id="credibility" name="credibility" placeholder="0~100 점수 입력"
+                       oninput="updateTotalScore()" th:value="${risk?.credibility ?: ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="total_score">총점:</label>
+                <input type="number" readonly id="total_score" name="total_score" placeholder="총점"
+                       th:value="${risk?.totalScore ?: ''}" required>
+            </div>
+        </div>
+
+        <!-- 저장 버튼 -->
+        <div class="button-group-container">
+            <div class="button-group">
+                <button type="button" class="button button-primary" onclick="location.href='/clientHome'">대시보드로 돌아가기
+                </button>
+                <button type="submit" class="button button-critical">저장</button>
+            </div>
+        </div>
+    </form>
 </div>
+<script>
+    let status = "[[${status}]]"; // Thymeleaf 문법
+    console.log(status)
+    switch (status) {
+        case"success":
+            break;
+        case "none":
+            alert("보고서가 없습니다");
+            break;
+        case "last":
+            alert("마지막 보고서 입니다");
+            break;
+    }
+</script>
 </body>
 </html>

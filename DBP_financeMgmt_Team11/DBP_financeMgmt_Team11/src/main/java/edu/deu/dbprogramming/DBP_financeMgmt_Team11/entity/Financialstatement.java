@@ -10,8 +10,9 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "FINANCIALSTATEMENT")
 public class Financialstatement {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 ID를 자동 생성
     @Size(max = 20)
-    @Column(name = "STATEMENT_ID", nullable = false, length = 20)
+    @Column(name = "STATEMENT_ID", length = 20)
     private String satementId;
 
     @Size(max = 20)
