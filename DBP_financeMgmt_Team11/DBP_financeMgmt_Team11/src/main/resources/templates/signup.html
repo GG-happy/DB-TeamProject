@@ -6,6 +6,25 @@
     <title th:text="${page_title}">사용자 관리</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script>
+        function openSearchPopup() {
+            const width = 1200;
+            const height = 1000;
+            const left = (window.innerWidth - width) / 2;
+            const top = (window.innerHeight - height) / 2;
+
+            window.open('/searchCompany', '기업검색', `width=${width},height=${height},left=${left},top=${top}`);
+        }
+
+        function validateForm(Element) {
+            const hiddenValue = Element.value.trim();
+            if (!hiddenValue) {
+                alert("고객정보가 선택되지 않았습니다!");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="edit-form">
@@ -71,20 +90,16 @@
 
 
         <!-- 기업 정보 -->
-        <div class="section">
+        <div class="section" th:if="${!(isSignUp||isManager)}">
             <h2>기업 정보</h2>
             <div class="form-group">
-                <label for="company">기업 선택</label>
-                <select class="form-control" id="company" name="company" required>
-                    <option value="">기업을 선택하세요</option>
-                    <!-- 기업 정보를 동적으로 채우기 -->
-                    <option th:each="company : ${companies}"
-                            th:value="${company.companyId}"
-                            th:text="${company.companyName}">
-                    </option>
-                </select>
+                <label for="companyID">기업 선택</label>
+                <button type="button" class="button button-secondary" onclick="openSearchPopup()">고객정보 선택하기</button>
+                <input type="hidden" id="companyID" name="companyID" th:value="${company_code} " readonly required>
+                <input type="text" id="companyName" name="companyName" th:value="${company_name}" placeholder="아직 선택되지 않았습니다" readonly>
             </div>
         </div>
+
 
         <!-- 숨겨진 필드 -->
         <input type="hidden" name="isSignUp" th:value="${isSignUp}">
@@ -93,6 +108,7 @@
         <!-- 제출 버튼 -->
         <div class="button-group-container">
             <div class="button-group">
+                <button type="button" class="button button-secondary" onclick="location.href='/'">홈으로</button>
                 <button type="submit" class="button button-primary w-100"><span th:text="${submit_button}"></span></button>
             </div>
         </div>
