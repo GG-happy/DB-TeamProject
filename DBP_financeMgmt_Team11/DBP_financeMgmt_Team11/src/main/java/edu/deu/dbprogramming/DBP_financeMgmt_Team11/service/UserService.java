@@ -1,6 +1,7 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.service;
 
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Company;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.CompanyRepository;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.UserDao;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.UserRepository;
 import org.springframework.security.core.userdetails.User;
@@ -16,10 +17,12 @@ public class UserService {
     private static UserDao userDao = null;
     private static final UserRepository userRepository = null;
     private static PasswordEncoder passwordEncoder = null;
+    public static CompanyRepository companyRepository = null;
 
-    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder, CompanyRepository companyRepository) {
         UserService.userDao = userDao;
         UserService.passwordEncoder = passwordEncoder;
+        UserService.companyRepository = companyRepository;
     }
 
     // 모든 사용자 정보 조회
@@ -30,6 +33,9 @@ public class UserService {
     // 특정 사용자 정보 조회
     public static Map<String, Object> getUserInfo(String userId) {
         Map<String, Object> user = userDao.getUserById(userId);
+        if (user.get("client_code")!=null){
+            user.put("company_name",companyRepository.findByCompanyId((String) user.get("client_code")).getCompanyName());
+        }
 
         // 추가 로직 (예: 특정 필드 검증, 데이터 가공 등)
         if (user == null || user.isEmpty()) {
@@ -41,6 +47,9 @@ public class UserService {
 
     public static Map<String, Object> getUserInfo(User user) {
         Map<String, Object> userMap = userDao.getUserById(user.getUsername());
+        if (userMap.get("client_code")!=null){
+            userMap.put("company_name",companyRepository.findByCompanyId((String) userMap.get("client_code")).getCompanyName());
+        }
 
         // 추가 로직 (예: 특정 필드 검증, 데이터 가공 등)
         if (userMap == null || userMap.isEmpty()) {

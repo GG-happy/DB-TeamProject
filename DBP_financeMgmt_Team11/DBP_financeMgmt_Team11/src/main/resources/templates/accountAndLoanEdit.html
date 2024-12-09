@@ -51,7 +51,7 @@
         </div>
 
         <!-- 대출 정보 -->
-        <div class="section">
+        <div class="section" th:if="${isLoan}">
             <h2>대출 정보</h2>
             <div class="form-group">
                 <input type="hidden" id="loanId" name="loanId" placeholder="대출코드 입력" th:value="${accountAndLoan.loanId}" required>

@@ -40,8 +40,8 @@ public class UserDao {
 
     public boolean addUser(Map<String, Object> userMap) {
         String query = """
-                    INSERT INTO USERS (USERNAME, PASSWORD, NAME, TITLE, EMAIL, PHONE, ROLE)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO USERS (USERNAME, PASSWORD, NAME, TITLE, EMAIL, PHONE, ROLE, CLIENT_CODE)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
         try {
@@ -53,7 +53,8 @@ public class UserDao {
                     userMap.get("title"),
                     userMap.get("email"),    // 네 번째 파라미터: EMAIL
                     userMap.get("phone"),    // 다섯 번째 파라미터: PHONE
-                    userMap.get("role")     // 여섯 번째 파라미터: ROLE
+                    userMap.get("role"),     // 여섯 번째 파라미터: ROLE
+                    userMap.get("companyID")
             );
             return true; // 성공 시 true 반환
         } catch (Exception e) {
@@ -65,7 +66,7 @@ public class UserDao {
     public boolean updateUser(Map<String, Object> userMap) {
         String query = """
                 UPDATE USERS
-                SET USERNAME = ?, PASSWORD = ?, NAME = ?, TITLE = ?,  EMAIL = ?, PHONE = ?, ROLE = ?
+                SET USERNAME = ?, PASSWORD = ?, NAME = ?, TITLE = ?,  EMAIL = ?, PHONE = ?, ROLE = ?, CLIENT_CODE = ?
                 WHERE USERNAME = ?
                 """;
 
@@ -79,8 +80,10 @@ public class UserDao {
                     userMap.get("email"),    // 네 번째 파라미터: EMAIL
                     userMap.get("phone"),    // 다섯 번째 파라미터: PHONE
                     userMap.get("role"),     // 여섯 번째 파라미터: ROLE
+                    userMap.get("companyID"),
                     userMap.get("original_username")
             );
+            System.out.println(userMap.get("companyID"));
             return true; // 성공 시 true 반환
         } catch (Exception e) {
             e.printStackTrace();

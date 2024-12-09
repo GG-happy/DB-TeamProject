@@ -12,19 +12,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
+
 @Controller
 public class IndexController {
+
+    private final UserService userService;
+
+    // 생성자 주입 방식
+    public IndexController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/")
     public String index(@AuthenticationPrincipal User user, Model model, HttpSession session) {
 
-
-        // 인증 정보를 Thymeleaf에서 처리 (SecurityContext는 자동 사용)
         if (user != null) {
             String username = user.getUsername();
-            Map<String, Object> userinfo= UserService.getUserInfo(username);
+            Map<String, Object> userinfo = userService.getUserInfo(username); // 수정된 부분
 
-            model.addAttribute("isAuthentication",true);
+            model.addAttribute("isAuthentication", true);
             model.addAttribute("username", username);
             model.addAttribute("name", userinfo.get("name"));
             model.addAttribute("title", userinfo.get("title"));
@@ -32,39 +38,29 @@ public class IndexController {
             model.addAttribute("email", userinfo.get("email"));
             model.addAttribute("role", userinfo.get("role"));
 
-            System.out.print("userinfo.get(role)");
-            System.out.println(userinfo.get("role"));
-
-            if(userinfo.get("role").equals("ROLE_bank-manager")) {
+            if ("ROLE_bank-manager".equals(userinfo.get("role"))) {
                 model.addAttribute("isManager", true);
-            }else {
+            } else {
                 model.addAttribute("isManager", false);
             }
 
-            if(userinfo.get("client_code")==null) {
-                model.addAttribute("isClientLinked", false);
-            }else {
-                model.addAttribute("isClientLinked", true);
-            }
-
+            model.addAttribute("isClientLinked", userinfo.get("client_code") != null);
         } else {
-            System.out.println("사용자가 로그인되어 있지 않습니다.");
-            model.addAttribute("isAuthentication",false);
+            model.addAttribute("isAuthentication", false);
             model.addAttribute("isManager", false);
             model.addAttribute("isClientLinked", false);
         }
         return "index";
-
-
     }
+
     @PostMapping("/connectClientCode")
     public String connectClientCode(
             @RequestParam String companyID,
             @RequestParam String companyName,
-            @AuthenticationPrincipal User user, Model model) {
+            @AuthenticationPrincipal User user) {
 
-        Map<String, Object> userinfo= UserService.getUserInfo(user);
-        UserService.updateClientCode((String) userinfo.get("username"),companyID);
+        Map<String, Object> userinfo = userService.getUserInfo(user.getUsername()); // 수정된 부분
+        userService.updateClientCode((String) userinfo.get("username"), companyID);
 
         return "redirect:/";
     }

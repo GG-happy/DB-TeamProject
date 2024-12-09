@@ -42,6 +42,11 @@ public class AccountAndLoanController {
         }
 
         AccountAndLoanDto accountAndLoanDto = accountAndLoanService.getAccountAndLoanDto(clientCode,accountId);
+        if (accountAndLoanDto.getLoanId() == null) {
+            model.addAttribute("isLoan", false);
+        }else{
+            model.addAttribute("isLoan", true);
+        }
         model.addAttribute("accountAndLoan", accountAndLoanDto);
 
         return "accountAndLoanEdit"; // HTML 파일 이름
@@ -76,11 +81,13 @@ public class AccountAndLoanController {
         accountAndLoanDto.setBalance(Double.parseDouble(formData.get("balance")));
         accountAndLoanDto.setBranch(formData.get("branch"));
         accountAndLoanDto.setOpenDate(formData.get("openDate"));
-        accountAndLoanDto.setLoanId(formData.get("loanId"));
-        accountAndLoanDto.setLoanAmount(Double.parseDouble(formData.get("loanAmount")));
-        accountAndLoanDto.setRepaymentPeriod(Integer.parseInt(formData.get("repaymentPeriod")));
-        accountAndLoanDto.setRepaymentStatus(formData.get("repaymentStatus"));
-        accountAndLoanDto.setAppliedRate(Double.parseDouble(formData.get("loanRate")));
+        if(formData.get("loanId") != null) {
+            accountAndLoanDto.setLoanId(formData.get("loanId"));
+            accountAndLoanDto.setLoanAmount(Double.parseDouble(formData.get("loanAmount")));
+            accountAndLoanDto.setRepaymentPeriod(Integer.parseInt(formData.get("repaymentPeriod")));
+            accountAndLoanDto.setRepaymentStatus(formData.get("repaymentStatus"));
+            accountAndLoanDto.setAppliedRate(Double.parseDouble(formData.get("loanRate")));
+        }
 
         // 서비스 계층을 통해 데이터 저장
         accountAndLoanService.updateAccountAndLoan(clientCode, accountAndLoanDto);
