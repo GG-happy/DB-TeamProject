@@ -10,7 +10,7 @@ CREATE OR REPLACE TRIGGER Update_CG_TRG
 AFTER INSERT OR UPDATE ON CreditEvaluation
 FOR EACH ROW
 DECLARE
-    GRADE VARCHAR2(10);
+    GRADE VARCHAR2(10);      -- 신용 등급
 BEGIN
         
     IF :NEW.credit_score >= 90 THEN GRADE := 'AAA';
@@ -27,6 +27,7 @@ BEGIN
     
     -- Company 테이블의 신용 등급 업데이트
     UPDATE Company SET credit_grade = GRADE WHERE company_id = :NEW.company_id;
+    
 END;
 /
 
@@ -37,11 +38,11 @@ CREATE OR REPLACE TRIGGER Update_FF_TRG
 AFTER INSERT OR UPDATE ON FinancialStatement
 FOR EACH ROW
 DECLARE
-    STAB NUMBER := 0;
-    PROF NUMBER := 0;
-    ACT  NUMBER := 0;
-    CASH NUMBER := 0;
-    TOT  NUMBER := 0;
+    STAB NUMBER := 0;       -- 안정성
+    PROF NUMBER := 0;       -- 수익성
+    ACT  NUMBER := 0;       -- 활동성
+    CASH NUMBER := 0;       -- 현금 흐름성
+    TOT  NUMBER := 0;       -- 총점
 BEGIN
     -- stability(안정성) : (총 자산 - 부채) / 총 자산 * 100
     IF :NEW.total_assets > 0 THEN
@@ -71,6 +72,13 @@ BEGIN
     SET stability = STAB, profitability = PROF, activity = ACT,
         cash_flow = CASH, total_score = TOT
     WHERE company_id = :NEW.company_id;
+    
+    -- 만약 업데이트된 행이 없다면 INSERT (기존 데이터가 없다는 뜻)
+    IF SQL%ROWCOUNT = 0 THEN
+        INSERT INTO FinancialFactor(evaluation_date, stability, profitability, activity, cash_flow, total_score, company_id)
+        VALUES(SYSDATE, STAB, PROF, ACT, CASH, TOT, :NEW.company_id);
+    END IF;
+
 END;
 /
 
@@ -81,32 +89,26 @@ CREATE OR REPLACE TRIGGER Update_Balance_TRG
 BEFORE INSERT OR UPDATE ON Transaction
 FOR EACH ROW
 DECLARE
-    AC_BAL NUMBER;
+    AC_BAL NUMBER := 0;
 BEGIN
     -- 1. 계좌정보 테이블에서 현재 계좌 잔액 가져오기
-    BEGIN
-        SELECT balance INTO AC_BAL FROM Account WHERE account_id = :NEW.account_id;
-    EXCEPTION       -- 키가 존재하지 않을 경우의 예외처리
-        WHEN NO_DATA_FOUND THEN
-            RAISE_APPLICATION_ERROR(-20001, 'account_id 키가 존재하지 않습니다.');
-    END;
+    SELECT balance INTO AC_BAL FROM Account WHERE account_id = :NEW.account_id;
 
     -- 2. 거래내역 테이블의 거래 후 잔액 계산
     :NEW.balance := AC_BAL + NVL(:NEW.transaction_amount, 0);
 
     -- 3. 계좌정보 테이블의 잔액 업데이트
-    UPDATE Account
-    SET balance = :NEW.balance
-    WHERE account_id = :NEW.account_id;
+    UPDATE Account SET balance = :NEW.balance WHERE account_id = :NEW.account_id;
+    
 END;
 /
 
--- 4. InterestRate(대출 금리)
+-- 4. InterestRate(대출 금리
 -- applied_rate(적용 금리) : 신용 평가 테이블의 신용 점수가 변경되면 적용 금리가 자동으로 다시 계산됨.
 CREATE OR REPLACE PROCEDURE UpdateAppliedRate(COM_ID VARCHAR2) AS
-    BASE_RATE NUMBER;       -- 기준 금리
-    SCORE NUMBER;           -- 신용 점수
-    APP_RATE NUMBER;        -- 적용 금리
+    BASE_RATE NUMBER := 3.25;       -- 기준 금리 초기화(기존 데이터가 없으면 수동으로 설정)
+    SCORE NUMBER := 0;              -- 신용 점수 초기화
+    APP_RATE NUMBER := 0;           -- 적용 금리 초기화
 BEGIN
     -- 기준 금리 가져오기
     SELECT base_rate INTO BASE_RATE FROM InterestRate WHERE company_id = COM_ID;
@@ -119,6 +121,13 @@ BEGIN
     
     --- 대출 금리 테이블의 적용 금리 업데이트
     UPDATE InterestRate SET applied_rate = APP_RATE WHERE company_id = COM_ID;
+    
+    -- 만약 업데이트된 행이 없다면 INSERT (기존 데이터가 없다는 뜻)
+    IF SQL%ROWCOUNT = 0 THEN
+        INSERT INTO InterestRate(base_rate,effective_year,applied_rate, company_id)
+        VALUES(BASE_RATE, SYSDATE, APP_RATE, COM_ID);
+    END IF;
+    
 END;
 /
 
@@ -141,16 +150,22 @@ CREATE OR REPLACE PROCEDURE UpdateCreditScore(COM_ID VARCHAR2) AS
 BEGIN
     -- 재무적 요소 총 점수 가져오기
     SELECT NVL(total_score, 0) INTO F_SCORE FROM FinancialFactor WHERE company_id = COM_ID;
-    
+
     -- 리스크 평가 총 점수 가져오기
-    SELECT NVL(total_score, 0) INTO R_SCORE FROM RiskEvaluation  WHERE company_id = COM_ID;
-    
-    -- 신용 점수 계샨
+    SELECT NVL(total_score, 0) INTO R_SCORE FROM RiskEvaluation WHERE company_id = COM_ID;
+
+    -- 신용 점수 계산
     C_SCORE := (F_SCORE + R_SCORE) / 2;
-    
-    -- 신용 점수 업데이트
+
+    -- UPDATE 시도
     UPDATE CreditEvaluation SET credit_score = C_SCORE WHERE company_id = COM_ID;
 
+    -- 만약 업데이트된 행이 없다면 INSERT
+    IF SQL%ROWCOUNT = 0 THEN
+        INSERT INTO CreditEvaluation (evaluation_date, credit_score, loan_limit, company_id)
+        VALUES ( SYSDATE, C_SCORE, 0, COM_ID);
+        -- 평가 날짜, 신용 점수, 초기 대출 한도 (업데이트가 따로 처리됨), 기업 ID
+    END IF;
 END;
 /
 
@@ -180,7 +195,7 @@ END;
 
 -- 신용 점수에 따른 대출 한도 변경
 CREATE OR REPLACE PROCEDURE UpdateLimit(EVA_ID IN VARCHAR2, LOAN OUT NUMBER) AS
-    SCORE NUMBER;
+    SCORE NUMBER := 0;  -- 신용 점수 초기화
 BEGIN
     -- 신용 점수 가져오기
     SELECT credit_score INTO SCORE FROM CreditEvaluation WHERE evaluation_id = EVA_ID;
@@ -205,7 +220,7 @@ CREATE OR REPLACE TRIGGER Update_LL_TRG
 AFTER INSERT OR UPDATE ON CreditEvaluation
 FOR EACH ROW
 DECLARE
-    LOAN NUMBER;
+    LOAN NUMBER := 0;   -- 대출 한도 초기화
 BEGIN
     -- '신용 점수'가 변동된 경우에만 실행
     IF NVL(:NEW.credit_score, 0) != NVL(:OLD.credit_score, 0) THEN
@@ -213,7 +228,7 @@ BEGIN
         UpdateLimit(:NEW.evaluation_id, LOAN);
         
         -- 대출 한도 업데이트
-        UPDATE CreditEvaluation SET loan_limit = LOAN WHERE company_id = :NEW.company_id;
+        UPDATE CreditEvaluation SET loan_limit = LOAN WHERE evaluation_id  = :NEW.evaluation_id;
     END IF;
 END;
 /
