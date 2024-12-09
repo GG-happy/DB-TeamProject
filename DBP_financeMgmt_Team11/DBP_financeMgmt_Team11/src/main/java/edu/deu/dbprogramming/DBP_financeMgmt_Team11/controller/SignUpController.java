@@ -91,7 +91,6 @@ public class SignUpController {
         // userService.saveOrUpdateUser(...);
         Map<String, Object> userMap= new HashMap<>();
         userMap.put("username", username);
-        userMap.put("companyId", companyId);
         userMap.put("password", password);
         userMap.put("passwordCheck", passwordCheck);
         userMap.put("passwordEdit", passwordEdit);
@@ -106,13 +105,20 @@ public class SignUpController {
 
         if (isSignUp) {
             if (UserService.addUser(userMap)) {
-
+                if(company != null) {
+                    UserService.updateClientCode(username,company);
+                }
                 return "signup-success";
             } else {
                 return "something-wrong";
             }
         }else{
             if(UserService.updateUser(userMap)){
+                // 기존 사용자 정보 업데이트 후 기업 코드 수정
+                if(company != null) {
+                    UserService.updateClientCode(username,company);
+                }
+
                 if (!username.equals(original_username)){
                     //ID변경시 재로그인 필요
                     return "redirect:/login?logout";
