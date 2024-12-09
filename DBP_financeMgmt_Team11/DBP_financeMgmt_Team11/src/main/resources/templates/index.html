@@ -29,17 +29,17 @@
 <!-- 페이지 제목 -->
 <h1 class="dashboard-title">은행 서비스 메인 페이지</h1>
 <div th:if="${isAuthentication}">
-    <p>안녕하세요, <span th:text="${name}"></span> <span th:text="${title}"></span>님!</p>
-    <p>Phone: <span th:text="${phone}"></span><br>Email: <span th:text="${email}"></span></p>
+    <p>안녕하세요, <span th:text="${name}"></span>님!</p>
+    <p>닉네임: <span th:text="${title}"></span>님<br>Phone: <span th:text="${phone}"></span><br>Email: <span th:text="${email}"></span></p>
 </div>
 
 <!-- 사용자 인증 여부에 따른 버튼 그룹 -->
 <div class="button-group-container">
     <div class="button-group">
         <div th:if="${isAuthentication}">
-
-            <button class="button button-secondary" onclick="location.href='/logout'">로그아웃</button>
+            <button class="button button-secondary" onclick="location.href='/account/make'"> 계좌 등록</button>
             <button class="button button-secondary" onclick="location.href='/userInfoEdit'">회원정보 수정</button>
+            <button class="button button-secondary" onclick="location.href='/logout'">로그아웃</button>
         </div>
         <div th:if="${!isAuthentication}">
             <button class="button button-secondary" onclick="location.href='/login'">로그인</button>

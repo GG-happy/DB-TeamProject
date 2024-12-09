@@ -18,6 +18,7 @@ package edu.deu.dbprogramming.DBP_financeMgmt_Team11;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
@@ -51,12 +52,15 @@ public class SecurityConfiguration {
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers(
                                 new AntPathRequestMatcher("/connectClientCode"),
-                                new AntPathRequestMatcher("/workingToClient") // 추가된 URL
+                                new AntPathRequestMatcher("/workingToClient"), // 추가된 URL
+                                new AntPathRequestMatcher("/account/make")
+
                         )
                 )
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/manager-home").hasRole("bank-manager")
-                        .requestMatchers("/", "/error", "/signup", "/userRegister","/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/error", "/signup", "/userRegister","/css/**", "/js/**", "/account/make").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/account/make").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
@@ -70,7 +74,6 @@ public class SecurityConfiguration {
         // @formatter:on
         return http.build();
     }
-
 
 
     @Bean

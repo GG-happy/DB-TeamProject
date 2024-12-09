@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>계좌 등록</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>계좌 등록</h1>
+<form action="/account/make" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+
+    <label for="accountNo">계좌번호:</label>
+    <input type="text" id="accountNo" name="accountNo" required><br>
+
+    <label for="accountName">계좌 이름:</label>
+    <input type="text" id="accountName" name="accountName" required><br>
+
+    <label for="classifica">계좌 분류:</label>
+    <input type="text" id="classifica" name="classifica" required><br>
+
+    <label for="branch">지점:</label>
+    <input type="text" id="branch" name="branch" required><br>
+
+    <label for="companyId">기업 선택:</label>
+    <select id="companyId" name="companyId">
+        <option value="" disabled selected>기업을 선택하세요</option>
+        <th:block th:each="company : ${companies}">
+            <option th:value="${company.companyId}" th:text="${company.companyName}"></option>
+        </th:block>
+    </select><br>
+    <button type="submit">등록</button>
+</form>
+</body>
+</html>
