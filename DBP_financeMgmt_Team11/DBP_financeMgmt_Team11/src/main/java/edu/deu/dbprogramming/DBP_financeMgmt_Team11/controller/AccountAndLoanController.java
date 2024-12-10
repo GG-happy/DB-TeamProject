@@ -84,7 +84,7 @@ public class AccountAndLoanController {
         if(formData.get("loanId") != null) {
             accountAndLoanDto.setLoanId(formData.get("loanId"));
             accountAndLoanDto.setLoanAmount(Double.parseDouble(formData.get("loanAmount")));
-            accountAndLoanDto.setRepaymentPeriod(Integer.parseInt(formData.get("repaymentPeriod")));
+            accountAndLoanDto.setRepaymentPeriod(formData.get("repaymentPeriod"));
             accountAndLoanDto.setRepaymentStatus(formData.get("repaymentStatus"));
             accountAndLoanDto.setAppliedRate(Double.parseDouble(formData.get("loanRate")));
         }

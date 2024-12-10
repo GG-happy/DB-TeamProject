@@ -10,13 +10,13 @@ public class AccountAndLoanDto {
     private String openDate;
     private String loanId;
     private double loanAmount;
-    private int repaymentPeriod;
+    private String repaymentPeriod;
     private String repaymentStatus;
     private double appliedRate;
 
     // 생성자
     public AccountAndLoanDto(String accountId, String accountNo, String accountName, String classifica, double balance,
-                             String branch, String openDate, String loanId, double loanAmount, int repaymentPeriod,
+                             String branch, String openDate, String loanId, double loanAmount, String repaymentPeriod,
                              String repaymentStatus, double appliedRate) {
         this.accountId = accountId;
         this.accountNo = accountNo;
@@ -72,7 +72,7 @@ public class AccountAndLoanDto {
         return loanAmount;
     }
 
-    public int getRepaymentPeriod() {
+    public String getRepaymentPeriod() {
         return repaymentPeriod;
     }
 
@@ -121,7 +121,7 @@ public class AccountAndLoanDto {
         this.loanAmount = loanAmount;
     }
 
-    public void setRepaymentPeriod(int repaymentPeriod) {
+    public void setRepaymentPeriod(String repaymentPeriod) {
         this.repaymentPeriod = repaymentPeriod;
     }
 
