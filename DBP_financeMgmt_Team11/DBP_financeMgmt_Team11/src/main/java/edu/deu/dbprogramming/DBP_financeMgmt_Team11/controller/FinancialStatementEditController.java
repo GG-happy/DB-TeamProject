@@ -1,6 +1,7 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.controller;
 
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Financialstatement;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.FinancialFactorTransactionService;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.FinancialStatementEditService;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -22,9 +23,10 @@ import java.util.stream.IntStream;
 public class FinancialStatementEditController {
 
     private final FinancialStatementEditService financialStatementEditService;
-
-    public FinancialStatementEditController(FinancialStatementEditService financialStatementEditService) {
+    private final FinancialFactorTransactionService financialFactorTransactionService;
+    public FinancialStatementEditController(FinancialStatementEditService financialStatementEditService, FinancialFactorTransactionService financialFactorTransactionService) {
         this.financialStatementEditService = financialStatementEditService; // DI 처리
+        this.financialFactorTransactionService = financialFactorTransactionService;
     }
 
     @GetMapping("/FinancialStatementEdit")
@@ -84,8 +86,6 @@ public class FinancialStatementEditController {
             }
         }
 
-
-
         Financialstatement financialstatement = new Financialstatement();
         financialstatement.setAnnualRevenue(parseLong(formData.get("annualRevenue")));
         financialstatement.setDebtAmount(parseLong(formData.get("debtAmount")));
@@ -95,7 +95,7 @@ public class FinancialStatementEditController {
         financialstatement.setFixedAssets(parseLong(formData.get("fixedAssets")));
         financialstatement.setTotalCost(parseLong(formData.get("totalCost")));
 
-
+        financialFactorTransactionService.UpdateFinancialFactor(financialstatement);
 
         boolean result=financialStatementEditService.saveFinancialStatement(formData.get("year"),formData.get("quarter"),clientCode,financialstatement);
         if(result){
