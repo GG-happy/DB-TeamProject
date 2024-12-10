@@ -80,7 +80,7 @@ CREATE TABLE InterestRate(
 CREATE TABLE Loan(
     loan_id             VARCHAR2(20)	 PRIMARY KEY,   -- 대출코드(PK)
     loan_amount         NUMBER           NOT NULL,      -- 대출금액
-    repayment_period    NUMBER           NOT NULL,      -- 상환기간
+    repayment_period    DATE             NOT NULL,      -- 상환기간
     repayment_status    VARCHAR2(20)	 NOT NULL,      -- 상환상태
     account_id          VARCHAR2(20)     NOT NULL,      -- 계좌코드(FK)
     loan_rate           VARCHAR2(20)     NOT NULL,      -- 대출금리(FK)
