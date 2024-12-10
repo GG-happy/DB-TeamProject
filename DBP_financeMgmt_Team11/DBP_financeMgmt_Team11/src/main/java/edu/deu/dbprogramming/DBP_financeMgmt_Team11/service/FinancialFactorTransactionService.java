@@ -19,7 +19,7 @@ public class FinancialFactorTransactionService {
     public FinancialFactorTransactionService(FinancialfactorRepository financialFactorRepository) {
         this.financialFactorRepository = financialFactorRepository;
     }
-
+    //@Transactional
     public void UpdateFinancialFactor(Financialstatement financialStatement) {
         // 변수 초기화
         double stability = 0.0;
