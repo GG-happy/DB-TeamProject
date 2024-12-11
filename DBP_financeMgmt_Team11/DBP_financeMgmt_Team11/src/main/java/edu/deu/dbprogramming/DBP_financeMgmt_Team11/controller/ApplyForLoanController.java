@@ -39,7 +39,7 @@ public class ApplyForLoanController {
         }
 
         Long loanLimit=applyForLoanService.checkLoanLimit(clientCode);
-        Long apppliedRate=applyForLoanService.checkApppliedRate(clientCode);
+        double apppliedRate=applyForLoanService.checkApppliedRate(clientCode);
 
         model.addAttribute("loanLimit", loanLimit);
         model.addAttribute("apppliedRate", apppliedRate);
@@ -57,8 +57,8 @@ public class ApplyForLoanController {
 
 
         Long new_loanLimit = applyForLoanService.checkLoanLimit(clientCode);
-        Long new_appliedRate = applyForLoanService.checkApppliedRate(clientCode);
-        Long formAppliedRate = Long.parseLong(formData.get("appliedRate"));
+        double new_appliedRate = applyForLoanService.checkApppliedRate(clientCode);
+        Double formAppliedRate = Double.parseDouble(formData.get("appliedRate"));
         Long formLoanLimit = Long.parseLong(formData.get("loanLimit"));
         long formLoanAmount = Long.parseLong(formData.get("loanAmount"));
 
