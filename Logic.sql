@@ -2,244 +2,265 @@
 /* ########  ID : Team ######## */
 ---------------------------------------------------------------
 -----------------------------
-/*    íŒŒìƒ ì†ì„± ëª©ë¡       */
+/*    ÆÄ»ý ¼Ó¼º ¸ñ·Ï       */
 -----------------------------
--- 1. Company(ê¸°ì—…ì •ë³´)
--- credit_grade(ì‹ ìš©ë“±ê¸‰) : ì‹ ìš© í‰ê°€ í…Œì´ë¸”ì˜ ì‹ ìš© ì ìˆ˜(credit_score)ê°€ ë³€ê²½ë˜ë©´ ì‹ ìš© ë“±ê¸‰ì´ ìžë™ìœ¼ë¡œ ë‹¤ì‹œ ì¸¡ì •ë¨.
-CREATE OR REPLACE TRIGGER Update_CG_TRG
-AFTER INSERT OR UPDATE ON CreditEvaluation
-FOR EACH ROW
-DECLARE
-    GRADE VARCHAR2(10);      -- ì‹ ìš© ë“±ê¸‰
+-- 1. Company(±â¾÷Á¤º¸)
+-- credit_grade(½Å¿ëµî±Þ) : ½Å¿ë Æò°¡ Å×ÀÌºíÀÇ ½Å¿ë Á¡¼ö(credit_score)°¡ º¯°æµÇ¸é ½Å¿ë µî±ÞÀÌ ÀÚµ¿À¸·Î ´Ù½Ã ÃøÁ¤µÊ.
+CREATE OR REPLACE PROCEDURE UpdateCreditGrade(COM_ID VARCHAR2) AS
+    GRADE VARCHAR2(10);
+    C_SCORE NUMBER;
 BEGIN
-        
-    IF :NEW.credit_score >= 90 THEN GRADE := 'AAA';
-    ELSIF :NEW.credit_score >= 80 THEN GRADE := 'AA';
-    ELSIF :NEW.credit_score >= 70 THEN GRADE := 'A';
-    ELSIF :NEW.credit_score >= 60 THEN GRADE := 'BBB';
-    ELSIF :NEW.credit_score >= 50 THEN GRADE := 'BB';
-    ELSIF :NEW.credit_score >= 40 THEN GRADE := 'B';
-    ELSIF :NEW.credit_score >= 30 THEN GRADE := 'CCC';
-    ELSIF :NEW.credit_score >= 20 THEN GRADE := 'CC';
-    ELSIF :NEW.credit_score >= 10 THEN GRADE := 'C';
+    SELECT credit_score INTO C_SCORE FROM CreditEvaluation WHERE company_id = COM_ID;
+    
+    IF C_SCORE >= 900 THEN GRADE := 'AAA';
+    ELSIF C_SCORE >= 800 THEN GRADE := 'AA';
+    ELSIF C_SCORE >= 700 THEN GRADE := 'A';
+    ELSIF C_SCORE >= 600 THEN GRADE := 'BBB';
+    ELSIF C_SCORE >= 500 THEN GRADE := 'BB';
+    ELSIF C_SCORE >= 400 THEN GRADE := 'B';
+    ELSIF C_SCORE >= 300 THEN GRADE := 'CCC';
+    ELSIF C_SCORE >= 200 THEN GRADE := 'CC';
+    ELSIF C_SCORE >= 100 THEN GRADE := 'C';
     ELSE GRADE := 'D';
     END IF;
     
-    -- Company í…Œì´ë¸”ì˜ ì‹ ìš© ë“±ê¸‰ ì—…ë°ì´íŠ¸
-    UPDATE Company SET credit_grade = GRADE WHERE company_id = :NEW.company_id;
-    
+    UPDATE Company SET credit_grade = GRADE WHERE company_id = COM_ID;
 END;
 /
 
--- 2. FinancialFactor(ìž¬ë¬´ì ìš”ì†Œ)
--- ì•ˆì •ì„±, ìˆ˜ìµì„±, í™œë™ì„±, í˜„ê¸ˆ íë¦„ì„±: ìž¬ë¬´ì œí‘œ í…Œì´ë¸”ì—ì„œ INSERT ë˜ëŠ” UPDATEê°€ ë°œìƒí•˜ë©´ ìžë™ìœ¼ë¡œ ê³„ì‚°ë¨.
--- ì´ ì ìˆ˜: ì•ˆì •ì„±, ìˆ˜ìµì„±, í™œë™ì„±, í˜„ê¸ˆ íë¦„ì„±ì´ ê³„ì‚°ë˜ë©´ í•¨ê»˜ ì´ ì ìˆ˜ë„ ìžë™ìœ¼ë¡œ ê³„ì‚°ë¨.
-CREATE OR REPLACE TRIGGER Update_FF_TRG
+/*
+CREATE OR REPLACE TRIGGER Update_CG_TRG --> Æ®¸®°Å Ãæµ¹·Î ÇÁ·Î½ÃÀú·Î ¼öÁ¤ÇÑ ÈÄ ÀÚ¹Ù¿¡¼­ Æ®·£Àè¼ÇÀ¸·Î ¼öÇàµË´Ï´Ù.
+AFTER INSERT OR UPDATE ON CreditEvaluation
+FOR EACH ROW
+DECLARE
+    GRADE VARCHAR2(10);      -- ½Å¿ë µî±Þ
+BEGIN
+
+    IF :NEW.credit_score >= 900 THEN GRADE := 'AAA';
+    ELSIF :NEW.credit_score >= 800 THEN GRADE := 'AA';
+    ELSIF :NEW.credit_score >= 700 THEN GRADE := 'A';
+    ELSIF :NEW.credit_score >= 600 THEN GRADE := 'BBB';
+    ELSIF :NEW.credit_score >= 500 THEN GRADE := 'BB';
+    ELSIF :NEW.credit_score >= 400 THEN GRADE := 'B';
+    ELSIF :NEW.credit_score >= 300 THEN GRADE := 'CCC';
+    ELSIF :NEW.credit_score >= 200 THEN GRADE := 'CC';
+    ELSIF :NEW.credit_score >= 100 THEN GRADE := 'C';
+    ELSE GRADE := 'D';
+    END IF;
+    
+    -- Company Å×ÀÌºíÀÇ ½Å¿ë µî±Þ ¾÷µ¥ÀÌÆ®
+    UPDATE Company SET credit_grade = GRADE WHERE company_id = :NEW.company_id;
+    
+END;
+/ */
+
+-- 2. FinancialFactor(Àç¹«Àû¿ä¼Ò)  
+-- ¾ÈÁ¤¼º, ¼öÀÍ¼º, È°µ¿¼º, Çö±Ý Èå¸§¼º: Àç¹«Á¦Ç¥ Å×ÀÌºí¿¡¼­ INSERT ¶Ç´Â UPDATE°¡ ¹ß»ýÇÏ¸é ÀÚµ¿À¸·Î °è»êµÊ.
+-- ÃÑ Á¡¼ö: ¾ÈÁ¤¼º, ¼öÀÍ¼º, È°µ¿¼º, Çö±Ý Èå¸§¼ºÀÌ °è»êµÇ¸é ÇÔ²² ÃÑ Á¡¼öµµ ÀÚµ¿À¸·Î °è»êµÊ.
+/*CREATE OR REPLACE TRIGGER Update_FF_TRG ---> ***Æ®¸®°Å Ãæµ¹·Î ÀÚ¹Ù¿¡¼­ ¼öÇàÇÏµµ·Ï ¿Å°Ü Æ®·£Àè¼ÇÀ¸·Î ±¸ÇöÇß½À´Ï´Ù.
 AFTER INSERT OR UPDATE ON FinancialStatement
 FOR EACH ROW
 DECLARE
-    STAB NUMBER := 0;       -- ì•ˆì •ì„±
-    PROF NUMBER := 0;       -- ìˆ˜ìµì„±
-    ACT  NUMBER := 0;       -- í™œë™ì„±
-    CASH NUMBER := 0;       -- í˜„ê¸ˆ íë¦„ì„±
-    TOT  NUMBER := 0;       -- ì´ì 
+    STAB NUMBER := 0;       -- ¾ÈÁ¤¼º
+    PROF NUMBER := 0;       -- ¼öÀÍ¼º
+    ACT  NUMBER := 0;       -- È°µ¿¼º
+    CASH NUMBER := 0;       -- Çö±Ý Èå¸§¼º
+    TOT  NUMBER := 0;       -- ÃÑÁ¡
 BEGIN
-    -- stability(ì•ˆì •ì„±) : (ì´ ìžì‚° - ë¶€ì±„) / ì´ ìžì‚° * 100
+    -- stability(¾ÈÁ¤¼º) : (ÃÑ ÀÚ»ê - ºÎÃ¤) / ÃÑ ÀÚ»ê * 100
     IF :NEW.total_assets > 0 THEN
         STAB := ((:NEW.total_assets - :NEW.debt_amount) / :NEW.total_assets) * 100;
     END IF;
 
-    -- profitability(ìˆ˜ìµì„±) : ìˆœì´ìµ / ì—°ë§¤ì¶œ * 100
+    -- profitability(¼öÀÍ¼º) : ¼øÀÌÀÍ / ¿¬¸ÅÃâ * 100
     IF :NEW.annual_revenue > 0 THEN
         PROF := (:NEW.net_profit / :NEW.annual_revenue) * 100;
     END IF;
 
-    -- activity(í™œë™ì„±) : ì—°ë§¤ì¶œ / ì´ ìžì‚°
+    -- activity(È°µ¿¼º) : ¿¬¸ÅÃâ / ÃÑ ÀÚ»ê
     IF :NEW.total_assets > 0 THEN
         ACT := :NEW.annual_revenue / :NEW.total_assets;
     END IF;
 
-    -- cash_flow(í˜„ê¸ˆ íë¦„ì„±) : ìœ ë™ ìžì‚° / ë¶€ì±„ * 100
+    -- cash_flow(Çö±Ý Èå¸§¼º) : À¯µ¿ ÀÚ»ê / ºÎÃ¤ * 100
     IF :NEW.debt_amount > 0 THEN
         CASH := (:NEW.current_assets / :NEW.debt_amount) * 100;
     END IF;
 
-    -- total_score(ì´ ì ìˆ˜) : ìœ„ ë„¤ ìš”ì†Œì˜ í‰ê· 
+    -- total_score(ÃÑ Á¡¼ö) : À§ ³× ¿ä¼ÒÀÇ Æò±Õ
     TOT := (STAB + PROF + ACT + CASH) / 4;
 
-    -- ìž¬ë¬´ì  ìš”ì†Œ í…Œì´ë¸”ì˜ ì ìˆ˜ë“¤ ì—…ë°ì´íŠ¸
-    UPDATE FinancialFactor
-    SET stability = STAB, profitability = PROF, activity = ACT,
-        cash_flow = CASH, total_score = TOT
-    WHERE company_id = :NEW.company_id;
-    
-    -- ë§Œì•½ ì—…ë°ì´íŠ¸ëœ í–‰ì´ ì—†ë‹¤ë©´ INSERT (ê¸°ì¡´ ë°ì´í„°ê°€ ì—†ë‹¤ëŠ” ëœ»)
-    IF SQL%ROWCOUNT = 0 THEN
-        INSERT INTO FinancialFactor(evaluation_date, stability, profitability, activity, cash_flow, total_score, company_id)
-        VALUES(SYSDATE, STAB, PROF, ACT, CASH, TOT, :NEW.company_id);
-    END IF;
+    -- Àç¹«Àû ¿ä¼Ò Å×ÀÌºíÀÇ Á¡¼öµé Ãß°¡
+    INSERT INTO FinancialFactor(evaluation_date, stability, profitability, activity, cash_flow, total_score, company_id)
+    VALUES(SYSDATE, STAB, PROF, ACT, CASH, TOT, :NEW.company_id);
 
 END;
-/
+/ */
 
--- 3. Transaction(ê±°ëž˜ë‚´ì—­), Account(ê³„ì¢Œì •ë³´)
--- Transactionì˜ balance(ê±°ëž˜ í›„ ìž”ì•¡) : ê±°ëž˜ ë‚´ì—­ í…Œì´ë¸”ì—ì„œ INSERT ë˜ëŠ” UPDATEê°€ ë°œìƒí•˜ë©´ ìžë™ìœ¼ë¡œ ê³„ì‚°ë¨.
--- Accountì˜ balance(ìž”ì•¡) : ê±°ëž˜ ë‚´ì—­ í…Œì´ë¸”ì—ì„œ ê±°ëž˜ í›„ ìž”ì•¡ì´ ë³€ê²½ë˜ë©´ ê³„ì¢Œ í…Œì´ë¸”ì˜ ìž”ì•¡ë„ ìžë™ìœ¼ë¡œ ì—…ë°ì´íŠ¸ë¨.
+-- 3. Transaction(°Å·¡³»¿ª), Account(°èÁÂÁ¤º¸)
+-- TransactionÀÇ balance(°Å·¡ ÈÄ ÀÜ¾×) : °Å·¡ ³»¿ª Å×ÀÌºí¿¡¼­ INSERT ¶Ç´Â UPDATE°¡ ¹ß»ýÇÏ¸é ÀÚµ¿À¸·Î °è»êµÊ.
+-- AccountÀÇ balance(ÀÜ¾×) : °Å·¡ ³»¿ª Å×ÀÌºí¿¡¼­ °Å·¡ ÈÄ ÀÜ¾×ÀÌ º¯°æµÇ¸é °èÁÂ Å×ÀÌºíÀÇ ÀÜ¾×µµ ÀÚµ¿À¸·Î ¾÷µ¥ÀÌÆ®µÊ.
 CREATE OR REPLACE TRIGGER Update_Balance_TRG
-BEFORE INSERT OR UPDATE ON Transaction
+BEFORE INSERT OR UPDATE ON Transaction      --> »ðÀÔ Àü
 FOR EACH ROW
 DECLARE
     AC_BAL NUMBER := 0;
 BEGIN
-    -- 1. ê³„ì¢Œì •ë³´ í…Œì´ë¸”ì—ì„œ í˜„ìž¬ ê³„ì¢Œ ìž”ì•¡ ê°€ì ¸ì˜¤ê¸°
-    SELECT balance INTO AC_BAL FROM Account WHERE account_id = :NEW.account_id;
+    -- 1. °èÁÂÁ¤º¸ Å×ÀÌºí¿¡¼­ ÇöÀç °èÁÂ ÀÜ¾× °¡Á®¿À±â
+    SELECT balance INTO AC_BAL FROM Account
+    WHERE account_id = :NEW.account_id;
 
-    -- 2. ê±°ëž˜ë‚´ì—­ í…Œì´ë¸”ì˜ ê±°ëž˜ í›„ ìž”ì•¡ ê³„ì‚°
+    -- 2. °Å·¡³»¿ª Å×ÀÌºíÀÇ °Å·¡ ÈÄ ÀÜ¾× °è»ê
     :NEW.balance := AC_BAL + NVL(:NEW.transaction_amount, 0);
 
-    -- 3. ê³„ì¢Œì •ë³´ í…Œì´ë¸”ì˜ ìž”ì•¡ ì—…ë°ì´íŠ¸
+    -- 3. °èÁÂÁ¤º¸ Å×ÀÌºíÀÇ ÀÜ¾× ¾÷µ¥ÀÌÆ®
     UPDATE Account SET balance = :NEW.balance WHERE account_id = :NEW.account_id;
     
 END;
 /
 
--- 4. InterestRate(ëŒ€ì¶œ ê¸ˆë¦¬
--- applied_rate(ì ìš© ê¸ˆë¦¬) : ì‹ ìš© í‰ê°€ í…Œì´ë¸”ì˜ ì‹ ìš© ì ìˆ˜ê°€ ë³€ê²½ë˜ë©´ ì ìš© ê¸ˆë¦¬ê°€ ìžë™ìœ¼ë¡œ ë‹¤ì‹œ ê³„ì‚°ë¨.
-CREATE OR REPLACE PROCEDURE UpdateAppliedRate(COM_ID VARCHAR2) AS
-    BASE_RATE NUMBER := 3.25;       -- ê¸°ì¤€ ê¸ˆë¦¬ ì´ˆê¸°í™”(ê¸°ì¡´ ë°ì´í„°ê°€ ì—†ìœ¼ë©´ ìˆ˜ë™ìœ¼ë¡œ ì„¤ì •)
-    SCORE NUMBER := 0;              -- ì‹ ìš© ì ìˆ˜ ì´ˆê¸°í™”
-    APP_RATE NUMBER := 0;           -- ì ìš© ê¸ˆë¦¬ ì´ˆê¸°í™”
+-- 4. InterestRate(´ëÃâ ±Ý¸®)
+-- applied_rate(Àû¿ë ±Ý¸®) : ½Å¿ë Æò°¡ Å×ÀÌºíÀÇ ½Å¿ë Á¡¼ö°¡ º¯°æµÇ¸é Àû¿ë ±Ý¸®°¡ ÀÚµ¿À¸·Î ´Ù½Ã °è»êµÊ.
+CREATE OR REPLACE PROCEDURE InsertAppliedRate(COM_ID VARCHAR2) AS
+    BASE_RATE NUMBER := 3.25;       -- ±âÁØ ±Ý¸® ÃÊ±âÈ­(±âÁ¸ µ¥ÀÌÅÍ°¡ ¾øÀ¸¸é ¼öµ¿À¸·Î ¼³Á¤)
+    SCORE NUMBER := 0;              -- ½Å¿ë Á¡¼ö ÃÊ±âÈ­
+    APP_RATE NUMBER := 0;           -- Àû¿ë ±Ý¸® ÃÊ±âÈ­
 BEGIN
-    -- ê¸°ì¤€ ê¸ˆë¦¬ ê°€ì ¸ì˜¤ê¸°
+    -- ±âÁØ ±Ý¸® °¡Á®¿À±â
     SELECT base_rate INTO BASE_RATE FROM InterestRate WHERE company_id = COM_ID;
     
-    -- ì‹ ìš© ì ìˆ˜ ê°€ì ¸ì˜¤ê¸°
+    -- ½Å¿ë Á¡¼ö °¡Á®¿À±â
     SELECT credit_score INTO SCORE FROM CreditEvaluation WHERE company_id = COM_ID;
     
-    -- ì ìš© ê¸ˆë¦¬ ê³„ì‚°í•˜ê¸°
+    -- Àû¿ë ±Ý¸® °è»êÇÏ±â
     APP_RATE := BASE_RATE + (100 - SCORE) * 0.01;
     
-    --- ëŒ€ì¶œ ê¸ˆë¦¬ í…Œì´ë¸”ì˜ ì ìš© ê¸ˆë¦¬ ì—…ë°ì´íŠ¸
-    UPDATE InterestRate SET applied_rate = APP_RATE WHERE company_id = COM_ID;
-    
-    -- ë§Œì•½ ì—…ë°ì´íŠ¸ëœ í–‰ì´ ì—†ë‹¤ë©´ INSERT (ê¸°ì¡´ ë°ì´í„°ê°€ ì—†ë‹¤ëŠ” ëœ»)
-    IF SQL%ROWCOUNT = 0 THEN
-        INSERT INTO InterestRate(base_rate,effective_year,applied_rate, company_id)
-        VALUES(BASE_RATE, SYSDATE, APP_RATE, COM_ID);
-    END IF;
-    
+    --- ´ëÃâ ±Ý¸® Å×ÀÌºíÀÇ Àû¿ë ±Ý¸® ¾÷µ¥ÀÌÆ®
+    INSERT INTO InterestRate(base_rate,effective_year,applied_rate, company_id)
+    VALUES(BASE_RATE, SYSDATE, APP_RATE, COM_ID);
+
 END;
 /
 
--- í…Œì´ë¸”ì˜ ë³€ê²½ ì‚¬í•­ì— ëŒ€í•´ ëŒ€ì¶œ ê¸ˆë¦¬ê°€ ìžë™ìœ¼ë¡œ ê°±ì‹ 
-CREATE OR REPLACE TRIGGER Update_AR_TRG
-AFTER INSERT OR UPDATE ON CreditEvaluation
+-- ½Å¿ë Æò°¡ Å×ÀÌºíÀÌ ¹Ù²î¸é ´ëÃâ ±Ý¸®°¡ ÀÚµ¿À¸·Î °»½Å
+/*
+CREATE OR REPLACE TRIGGER Update_AR_TRG     --> Ãæµ¹ ¹ß»ýÀ¸·Î Æ®·£Àè¼ÇÀ¸·Î ±¸Çö
+AFTER INSERT OR UPDATE ON CreditEvaluation  --> º¯°æ ÈÄ
 FOR EACH ROW
 BEGIN
     UpdateAppliedRate(:NEW.company_id);
 END;
 /
+*/
 
--- 5. CreditEvaluation(ì‹ ìš©í‰ê°€)
--- credit_score(ì‹ ìš©ì ìˆ˜) : ìž¬ë¬´ì  ìš”ì†Œ í…Œì´ë¸”ì˜ ì´ ì ìˆ˜ê°€ ë³€ê²½ë  ë•Œ, ë¦¬ìŠ¤í¬ í‰ê°€ í…Œì´ë¸”ì˜ ì´ ì ìˆ˜ê°€ ë³€ê²½ë  ë•Œ ìžë™ìœ¼ë¡œ ë‹¤ì‹œ ê³„ì‚°ë¨.
--- loan_limit(ëŒ€ì¶œí•œë„) : ì‹ ìš© ì ìˆ˜ê°€ ë³€ê²½ë  ë•Œ ìžë™ìœ¼ë¡œ ëŒ€ì¶œ í•œë„ê°€ ì—…ë°ì´íŠ¸ë¨.
+-- 5. CreditEvaluation(½Å¿ëÆò°¡)
+-- credit_score(½Å¿ëÁ¡¼ö) : Àç¹«Àû ¿ä¼Ò Å×ÀÌºíÀÇ ÃÑ Á¡¼ö°¡ º¯°æµÉ ¶§, ¸®½ºÅ© Æò°¡ Å×ÀÌºíÀÇ ÃÑ Á¡¼ö°¡ º¯°æµÉ ¶§ ÀÚµ¿À¸·Î ´Ù½Ã °è»êµÊ.
+-- loan_limit(´ëÃâÇÑµµ) : ½Å¿ë Á¡¼ö°¡ º¯°æµÉ ¶§ ÀÚµ¿À¸·Î ´ëÃâ ÇÑµµ°¡ ¾÷µ¥ÀÌÆ®µÊ.
 CREATE OR REPLACE PROCEDURE UpdateCreditScore(COM_ID VARCHAR2) AS
-    F_SCORE NUMBER := 0;     -- ìž¬ë¬´ì  ìš”ì†Œ ì´ ì ìˆ˜ ì´ˆê¸°í™”
-    R_SCORE NUMBER := 0;     -- ë¦¬ìŠ¤í¬ í‰ê°€ ì´ ì ìˆ˜ ì´ˆê¸°í™”
-    C_SCORE NUMBER := 0;     -- ì‹ ìš© ì ìˆ˜ ì´ˆê¸°í™”
+    F_SCORE NUMBER := 0;     -- Àç¹«Àû ¿ä¼Ò ÃÑ Á¡¼ö ÃÊ±âÈ­
+    R_SCORE NUMBER := 0;     -- ¸®½ºÅ© Æò°¡ ÃÑ Á¡¼ö ÃÊ±âÈ­
+    C_SCORE NUMBER := 0;     -- ½Å¿ë Á¡¼ö ÃÊ±âÈ­
 BEGIN
-    -- ìž¬ë¬´ì  ìš”ì†Œ ì´ ì ìˆ˜ ê°€ì ¸ì˜¤ê¸°
-    SELECT NVL(total_score, 0) INTO F_SCORE FROM FinancialFactor WHERE company_id = COM_ID;
+    -- ÇØ´ç ±â¾÷ÀÇ ÃÖ½Å Àç¹«Àû ¿ä¼Ò ÃÑ Á¡¼ö °¡Á®¿À±â
+    SELECT NVL(total_score, 0) INTO F_SCORE FROM FinancialFactor
+    WHERE company_id = COM_ID AND
+        evaluation_date = (SELECT MAX(evaluation_date) FROM FinancialFactor WHERE company_id = COM_ID);
 
-    -- ë¦¬ìŠ¤í¬ í‰ê°€ ì´ ì ìˆ˜ ê°€ì ¸ì˜¤ê¸°
-    SELECT NVL(total_score, 0) INTO R_SCORE FROM RiskEvaluation WHERE company_id = COM_ID;
+    -- ÇØ´ç ±â¾÷ÀÇ ÃÖ½Å ¸®½ºÅ© Æò°¡ ÃÑ Á¡¼ö °¡Á®¿À±â
+    SELECT NVL(total_score, 0) INTO R_SCORE FROM RiskEvaluation
+    WHERE company_id = COM_ID AND
+        evaluation_date = (SELECT MAX(evaluation_date) FROM RiskEvaluation WHERE company_id = COM_ID);
 
-    -- ì‹ ìš© ì ìˆ˜ ê³„ì‚°
+    -- ½Å¿ë Á¡¼ö °è»ê
     C_SCORE := (F_SCORE + R_SCORE) / 2;
 
-    -- UPDATE ì‹œë„
-    UPDATE CreditEvaluation SET credit_score = C_SCORE WHERE company_id = COM_ID;
+    -- ½Å¿ëÆò°¡ »ðÀÔ
+    INSERT INTO CreditEvaluation (evaluation_date, credit_score, loan_limit, company_id)
+    VALUES ( SYSDATE, C_SCORE, 0, COM_ID); -- Æò°¡ ³¯Â¥, ½Å¿ë Á¡¼ö, ÃÊ±â ´ëÃâ ÇÑµµ(µû·Î Ã³¸®µÊ), ±â¾÷ ID
 
-    -- ë§Œì•½ ì—…ë°ì´íŠ¸ëœ í–‰ì´ ì—†ë‹¤ë©´ INSERT
-    IF SQL%ROWCOUNT = 0 THEN
-        INSERT INTO CreditEvaluation (evaluation_date, credit_score, loan_limit, company_id)
-        VALUES ( SYSDATE, C_SCORE, 0, COM_ID);
-        -- í‰ê°€ ë‚ ì§œ, ì‹ ìš© ì ìˆ˜, ì´ˆê¸° ëŒ€ì¶œ í•œë„ (ì—…ë°ì´íŠ¸ê°€ ë”°ë¡œ ì²˜ë¦¬ë¨), ê¸°ì—… ID
-    END IF;
 END;
 /
 
--- ìž¬ë¬´ì  ìš”ì†Œ í…Œì´ë¸” ë³€ê²½ ì‹œ ì‹ ìš© ì ìˆ˜ ì—…ë°ì´íŠ¸
-CREATE OR REPLACE TRIGGER Update_FF2CS_TRG
-AFTER INSERT OR UPDATE ON FinancialFactor
+-- Àç¹«Àû ¿ä¼Ò Å×ÀÌºí º¯°æ ½Ã ½Å¿ë Á¡¼ö ¾÷µ¥ÀÌÆ®
+/*
+CREATE OR REPLACE TRIGGER Update_FF2CS_TRG  --> Ãæµ¹ »ý±è
+AFTER INSERT OR UPDATE ON FinancialFactor 
 FOR EACH ROW
 BEGIN
-    -- ìž¬ë¬´ì  ìš”ì†Œ í…Œì´ë¸”ì˜ 'ì´ ì ìˆ˜'ê°€ ë³€ë™ëœ ê²½ìš°ì—ë§Œ ì‹¤í–‰
+    -- Àç¹«Àû ¿ä¼Ò Å×ÀÌºíÀÇ 'ÃÑ Á¡¼ö'°¡ º¯µ¿µÈ °æ¿ì¿¡¸¸ ½ÇÇà
     IF NVL(:NEW.total_score, 0) != NVL(:OLD.total_score, 0)
         THEN UpdateCreditScore(:NEW.company_id);
     END IF;
 END;
 /
+*/
 
--- ë¦¬ìŠ¤í¬ í‰ê°€ í…Œì´ë¸” ë³€ê²½ ì‹œ ì‹ ìš© ì ìˆ˜ ì—…ë°ì´íŠ¸
+-- ¸®½ºÅ© Æò°¡ Å×ÀÌºí º¯°æ ½Ã ½Å¿ë Á¡¼ö ¾÷µ¥ÀÌÆ®
 CREATE OR REPLACE TRIGGER Update_RE2CS_TRG
-AFTER INSERT OR UPDATE ON RiskEvaluation
+AFTER INSERT OR UPDATE ON RiskEvaluation        -- »ðÀÔ ÈÄ
 FOR EACH ROW
 BEGIN
-    -- ë¦¬ìŠ¤í¬ í‰ê°€ í…Œì´ë¸”ì˜ 'ì´ ì ìˆ˜'ê°€ ë³€ë™ëœ ê²½ìš°ì—ë§Œ ì‹¤í–‰
+    -- ¸®½ºÅ© Æò°¡ Å×ÀÌºíÀÇ 'ÃÑ Á¡¼ö'°¡ º¯µ¿µÈ °æ¿ì¿¡¸¸ ½ÇÇà
     IF NVL(:NEW.total_score, 0) != NVL(:OLD.total_score, 0)
         THEN UpdateCreditScore(:NEW.company_id);
     END IF;
 END;
 /
-
--- ì‹ ìš© ì ìˆ˜ì— ë”°ë¥¸ ëŒ€ì¶œ í•œë„ ë³€ê²½
-CREATE OR REPLACE PROCEDURE UpdateLimit(EVA_ID IN VARCHAR2, LOAN OUT NUMBER) AS
-    SCORE NUMBER := 0;  -- ì‹ ìš© ì ìˆ˜ ì´ˆê¸°í™”
+-------------------------------------
+-- ½Å¿ë Á¡¼ö¿¡ µû¸¥ ½Å¿ë ÇÑµµ º¯°æ
+-------------------------------------
+CREATE OR REPLACE PROCEDURE UpdateLimit(EVA_ID IN VARCHAR2) AS
+    SCORE NUMBER := 0;  -- ½Å¿ë Á¡¼ö ÃÊ±âÈ­
+    LOAN NUMBER := 0;   -- ´ëÃâ ÇÑµµ ÃÊ±âÈ­
 BEGIN
-    -- ì‹ ìš© ì ìˆ˜ ê°€ì ¸ì˜¤ê¸°
+    -- ÃÖ½Å ½Å¿ë Á¡¼ö °¡Á®¿À±â
     SELECT credit_score INTO SCORE FROM CreditEvaluation WHERE evaluation_id = EVA_ID;
     
-    -- ì‹ ìš© ì ìˆ˜ì— ë”°ë¥¸ í•œë„ ì¸¡ì •
-    IF SCORE >= 90 THEN LOAN := 10000000000;    -- 100ì–µ
-    ELSIF SCORE >= 80 THEN LOAN := 5000000000;  -- 50ì–µ
-    ELSIF SCORE >= 70 THEN LOAN := 1000000000;  -- 10ì–µ
-    ELSIF SCORE >= 60 THEN LOAN := 500000000;   -- 5ì–µ
-    ELSIF SCORE >= 50 THEN LOAN := 100000000;   -- 1ì–µ
-    ELSIF SCORE >= 40 THEN LOAN := 50000000;    -- 5ì²œ
-    ELSIF SCORE >= 30 THEN LOAN := 10000000;    -- 1ì²œ
-    ELSIF SCORE >= 20 THEN LOAN := 5000000;     -- 5ë°±
-    ELSIF SCORE >= 10 THEN LOAN := 1000000;     -- 1ë°±
+    -- ½Å¿ë Á¡¼ö¿¡ µû¸¥ ÇÑµµ ÃøÁ¤
+    IF SCORE >= 900 THEN LOAN := 10000000000;    -- 100¾ï
+    ELSIF SCORE >= 800 THEN LOAN := 5000000000;  -- 50¾ï
+    ELSIF SCORE >= 700 THEN LOAN := 1000000000;  -- 10¾ï
+    ELSIF SCORE >= 600 THEN LOAN := 500000000;   -- 5¾ï
+    ELSIF SCORE >= 500 THEN LOAN := 100000000;   -- 1¾ï
+    ELSIF SCORE >= 400 THEN LOAN := 50000000;    -- 5Ãµ
+    ELSIF SCORE >= 300 THEN LOAN := 10000000;    -- 1Ãµ
+    ELSIF SCORE >= 200 THEN LOAN := 5000000;     -- 5¹é
+    ELSIF SCORE >= 100 THEN LOAN := 1000000;     -- 1¹é
     ELSE LOAN := 0;
     END IF;
+    
+    UPDATE CreditEvaluation SET loan_limit = LOAN WHERE evaluation_id = EVA_ID;
+    
 END;
 /
 
--- ì‹ ìš© í‰ê°€ í…Œì´ë¸” ë³€ê²½ ì‹œ ëŒ€ì¶œ í•œë„ ì—…ë°ì´íŠ¸
-CREATE OR REPLACE TRIGGER Update_LL_TRG
-AFTER INSERT OR UPDATE ON CreditEvaluation
+-- ½Å¿ë Æò°¡ Å×ÀÌºí º¯°æ ½Ã ´ëÃâ ÇÑµµ ¾÷µ¥ÀÌÆ®
+/*
+CREATE OR REPLACE TRIGGER Update_LL_TRG  --> Æ®¸®°Å Ãæµ¹ ¹ß»ýÀ¸·Î Æ®·£Àè¼ÇÀ¸·Î ±¸Çö
+AFTER INSERT OR UPDATE ON CreditEvaluation      --> º¯°æ ÈÄ
 FOR EACH ROW
 DECLARE
-    LOAN NUMBER := 0;   -- ëŒ€ì¶œ í•œë„ ì´ˆê¸°í™”
+    LOAN NUMBER := 0;   -- ´ëÃâ ÇÑµµ ÃÊ±âÈ­
 BEGIN
-    -- 'ì‹ ìš© ì ìˆ˜'ê°€ ë³€ë™ëœ ê²½ìš°ì—ë§Œ ì‹¤í–‰
+    -- '½Å¿ë Á¡¼ö'°¡ º¯µ¿µÈ °æ¿ì¿¡¸¸ ½ÇÇà
     IF NVL(:NEW.credit_score, 0) != NVL(:OLD.credit_score, 0) THEN
-        -- í”„ë¡œì‹œì €ë¥¼ í˜¸ì¶œí•˜ì—¬ í•œë„ ì¸¡ì •
+        -- ÇÁ·Î½ÃÀú¸¦ È£ÃâÇÏ¿© ÇÑµµ ÃøÁ¤
         UpdateLimit(:NEW.evaluation_id, LOAN);
         
-        -- ëŒ€ì¶œ í•œë„ ì—…ë°ì´íŠ¸
+        -- ´ëÃâ ÇÑµµ ¾÷µ¥ÀÌÆ®
         UPDATE CreditEvaluation SET loan_limit = LOAN WHERE evaluation_id  = :NEW.evaluation_id;
     END IF;
 END;
 /
+*/
 
--- 6. RiskEvaluation(ë¦¬ìŠ¤í¬í‰ê°€)
--- ì´ ì ìˆ˜: ë¦¬ìŠ¤í¬ í‰ê°€ í…Œì´ë¸”ì—ì„œ INSERT ë˜ëŠ” UPDATEê°€ ë°œìƒí•˜ë©´ ìžë™ìœ¼ë¡œ ê³„ì‚°.
+-- 6. RiskEvaluation(¸®½ºÅ©Æò°¡)
+-- ÃÑ Á¡¼ö: ¸®½ºÅ© Æò°¡ Å×ÀÌºí¿¡¼­ INSERT ¶Ç´Â UPDATE°¡ ¹ß»ýÇÏ¸é ÀÚµ¿À¸·Î °è»ê.
 CREATE OR REPLACE TRIGGER Update_RiskScore_TRG
-BEFORE INSERT OR UPDATE ON RiskEvaluation
+BEFORE INSERT OR UPDATE ON RiskEvaluation       -- »ðÀÔ Àü
 FOR EACH ROW
 BEGIN
-    -- total_score(ì´ ì ìˆ˜) : ì‚°ì—…, ê²½ì˜, ì˜ì—…, ìž¬ë¬´ ìœ„í—˜ ì ìˆ˜ í•©ì‚°.
+    -- total_score(ÃÑ Á¡¼ö) : »ê¾÷, °æ¿µ, ¿µ¾÷, Àç¹« À§Çè Á¡¼ö ÇÕ»ê.
     :NEW.total_score := NVL(:NEW.industry_risk, 0) +
                         NVL(:NEW.management_risk, 0) +
                         NVL(:NEW.operation_risk, 0) +
