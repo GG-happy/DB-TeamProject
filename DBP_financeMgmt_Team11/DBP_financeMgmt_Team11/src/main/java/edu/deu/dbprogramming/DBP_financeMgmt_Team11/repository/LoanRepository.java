@@ -4,6 +4,7 @@ import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Loan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -28,7 +29,7 @@ public interface LoanRepository extends JpaRepository<Loan, String> {
      * @param repaymentPeriod 최대 상환 기간
      * @return 대출 목록
      */
-    List<Loan> findByRepaymentPeriodLessThanEqual(Long repaymentPeriod);
+    List<Loan> findByRepaymentPeriodLessThanEqual(LocalDate repaymentPeriod);
 
     /**
      * 특정 상환 상태를 가진 대출 목록 조회
