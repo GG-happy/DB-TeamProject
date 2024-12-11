@@ -25,7 +25,7 @@ public class ApplyForLoanService {
         this.creditevaluationRepository = creditevaluationRepository;
     }
 
-    public Long checkApppliedRate(String companyId) {
+    public Double checkApppliedRate(String companyId) {
         Interestrate interestrate = interestrateRepository.findFirstByCompanyCompanyIdOrderByEffectiveYearDesc(companyId);
         if (interestrate == null) {
             System.out.println("interest rate == null");

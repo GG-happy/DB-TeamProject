@@ -26,7 +26,7 @@ public class Interestrate {
 
     @NotNull
     @Column(name = "APPLIED_RATE", nullable = false)
-    private Long appliedRate;
+    private double appliedRate;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -58,7 +58,7 @@ public class Interestrate {
         this.effectiveYear = effectiveYear;
     }
 
-    public Long getAppliedRate() {
+    public double getAppliedRate() {
         return appliedRate;
     }
 

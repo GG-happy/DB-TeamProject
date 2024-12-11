@@ -18,7 +18,7 @@ public class ApplyForLoanEntity {
     private LocalDate OpenDate;
     //Balance(잔액)은 대출에 *-1
     private Double LoanAmount;
-    private Double RepaymentPeriod;
+    private LocalDate RepaymentPeriod;
     private String RepaymentStatus;
     private String InterestId;
     private CompanyRepository companyRepository;
@@ -135,11 +135,11 @@ public class ApplyForLoanEntity {
         LoanAmount = loanAmount;
     }
 
-    public Double getRepaymentPeriod() {
+    public LocalDate getRepaymentPeriod() {
         return RepaymentPeriod;
     }
 
-    public void setRepaymentPeriod(Double repaymentPeriod) {
+    public void setRepaymentPeriod(LocalDate repaymentPeriod) {
         RepaymentPeriod = repaymentPeriod;
     }
 

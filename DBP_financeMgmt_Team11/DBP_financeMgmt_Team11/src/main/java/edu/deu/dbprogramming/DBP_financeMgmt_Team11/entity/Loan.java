@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "LOAN")
 public class Loan {
@@ -22,7 +24,7 @@ public class Loan {
 
     @NotNull
     @Column(name = "REPAYMENT_PERIOD", nullable = false)
-    private Double repaymentPeriod;
+    private LocalDate repaymentPeriod;
 
     @Size(max = 20)
     @NotNull
@@ -57,11 +59,11 @@ public class Loan {
         this.loanAmount = loanAmount;
     }
 
-    public Double getRepaymentPeriod() {
+    public LocalDate getRepaymentPeriod() {
         return repaymentPeriod;
     }
 
-    public void setRepaymentPeriod(Double repaymentPeriod) {
+    public void setRepaymentPeriod(LocalDate repaymentPeriod) {
         this.repaymentPeriod = repaymentPeriod;
     }
 
