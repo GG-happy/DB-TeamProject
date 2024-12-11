@@ -28,8 +28,8 @@
         <th:block th:each="company : ${companies}">
             <option th:value="${company.companyId}" th:text="${company.companyName}"></option>
         </th:block>
-    </select><br>
-    <button type="submit">등록</button>
+    </select><br><br>
+    <button type="submit" class="button button-primary">등록</button>
 </form>
 </body>
 </html>

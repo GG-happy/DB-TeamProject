@@ -2,6 +2,8 @@ package edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository;
 
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Financialfactor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -29,33 +31,36 @@ public interface FinancialfactorRepository extends JpaRepository<Financialfactor
      * @param totalScore 최소 총 점수
      * @return 재무요소 목록
      */
-    List<Financialfactor> findByTotalScoreGreaterThanEqual(Long totalScore);
+    List<Financialfactor> findByTotalScoreGreaterThanEqual(Double totalScore);
 
     /**
      * 안정성이 특정 값 이상인 재무요소 조회
      * @param stability 최소 안정성
      * @return 재무요소 목록
      */
-    List<Financialfactor> findByStabilityGreaterThanEqual(Long stability);
+    List<Financialfactor> findByStabilityGreaterThanEqual(Double stability);
 
     /**
      * 수익성이 특정 값 이상인 재무요소 조회
      * @param profitability 최소 수익성
      * @return 재무요소 목록
      */
-    List<Financialfactor> findByProfitabilityGreaterThanEqual(Long profitability);
+    List<Financialfactor> findByProfitabilityGreaterThanEqual(Double profitability);
 
     /**
      * 활동성이 특정 값 이상인 재무요소 조회
      * @param activity 최소 활동성
      * @return 재무요소 목록
      */
-    List<Financialfactor> findByActivityGreaterThanEqual(Long activity);
+    List<Financialfactor> findByActivityGreaterThanEqual(Double activity);
 
     /**
      * 현금 흐름성이 특정 값 이상인 재무요소 조회
      * @param cashFlow 최소 현금 흐름성
      * @return 재무요소 목록
      */
-    List<Financialfactor> findByCashFlowGreaterThanEqual(Long cashFlow);
+    List<Financialfactor> findByCashFlowGreaterThanEqual(Double cashFlow);
+
+    @Query("SELECT f FROM Financialfactor f WHERE f.company.companyId = :companyId ORDER BY f.evaluationDate DESC LIMIT 1")
+    Financialfactor findLatestByCompanyId(@Param("companyId") String companyId);
 }

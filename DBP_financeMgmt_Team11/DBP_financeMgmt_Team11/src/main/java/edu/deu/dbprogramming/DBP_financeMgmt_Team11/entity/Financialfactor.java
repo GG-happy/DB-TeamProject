@@ -22,19 +22,19 @@ public class Financialfactor {
 
     @NotNull
     @Column(name = "STABILITY", nullable = false)
-    private Long stability;
+    private Double stability;
 
     @NotNull
     @Column(name = "PROFITABILITY", nullable = false)
-    private Long profitability;
+    private Double profitability;
 
     @NotNull
     @Column(name = "ACTIVITY", nullable = false)
-    private Long activity;
+    private Double activity;
 
     @NotNull
     @Column(name = "CASH_FLOW", nullable = false)
-    private Long cashFlow;
+    private Double cashFlow;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -43,7 +43,7 @@ public class Financialfactor {
     private Company company;
 
     @Column(name = "TOTAL_SCORE")
-    private Long totalScore;
+    private Double totalScore;
 
     public String getFactorId() {
         return factorId;
@@ -61,35 +61,35 @@ public class Financialfactor {
         this.evaluationDate = evaluationDate;
     }
 
-    public Long getStability() {
+    public Double getStability() {
         return stability;
     }
 
-    public void setStability(Long stability) {
+    public void setStability(Double stability) {
         this.stability = stability;
     }
 
-    public Long getProfitability() {
+    public Double getProfitability() {
         return profitability;
     }
 
-    public void setProfitability(Long profitability) {
+    public void setProfitability(Double profitability) {
         this.profitability = profitability;
     }
 
-    public Long getActivity() {
+    public Double getActivity() {
         return activity;
     }
 
-    public void setActivity(Long activity) {
+    public void setActivity(Double activity) {
         this.activity = activity;
     }
 
-    public Long getCashFlow() {
+    public Double getCashFlow() {
         return cashFlow;
     }
 
-    public void setCashFlow(Long cashFlow) {
+    public void setCashFlow(Double cashFlow) {
         this.cashFlow = cashFlow;
     }
 
@@ -101,11 +101,11 @@ public class Financialfactor {
         this.company = company;
     }
 
-    public Long getTotalScore() {
+    public Double getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(Long totalScore) {
+    public void setTotalScore(Double totalScore) {
         this.totalScore = totalScore;
     }
 

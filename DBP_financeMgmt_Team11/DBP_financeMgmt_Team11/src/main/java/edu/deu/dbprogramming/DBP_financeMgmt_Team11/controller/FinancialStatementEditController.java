@@ -1,7 +1,9 @@
 package edu.deu.dbprogramming.DBP_financeMgmt_Team11.controller;
 
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Financialstatement;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.FinancialFactorTransactionService;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.FinancialStatementEditService;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.StoredProcedureService;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,9 +24,14 @@ import java.util.stream.IntStream;
 public class FinancialStatementEditController {
 
     private final FinancialStatementEditService financialStatementEditService;
-
-    public FinancialStatementEditController(FinancialStatementEditService financialStatementEditService) {
+    private final FinancialFactorTransactionService financialFactorTransactionService;
+    private final StoredProcedureService storedProcedureService;
+    public FinancialStatementEditController(FinancialStatementEditService financialStatementEditService,
+                                            FinancialFactorTransactionService financialFactorTransactionService,
+                                            StoredProcedureService storedProcedureService) {
         this.financialStatementEditService = financialStatementEditService; // DI 처리
+        this.financialFactorTransactionService = financialFactorTransactionService;
+        this.storedProcedureService = storedProcedureService;
     }
 
     @GetMapping("/FinancialStatementEdit")
@@ -84,8 +91,6 @@ public class FinancialStatementEditController {
             }
         }
 
-
-
         Financialstatement financialstatement = new Financialstatement();
         financialstatement.setAnnualRevenue(parseLong(formData.get("annualRevenue")));
         financialstatement.setDebtAmount(parseLong(formData.get("debtAmount")));
@@ -95,10 +100,10 @@ public class FinancialStatementEditController {
         financialstatement.setFixedAssets(parseLong(formData.get("fixedAssets")));
         financialstatement.setTotalCost(parseLong(formData.get("totalCost")));
 
-
-
         boolean result=financialStatementEditService.saveFinancialStatement(formData.get("year"),formData.get("quarter"),clientCode,financialstatement);
         if(result){
+            financialFactorTransactionService.UpdateFinancialFactor(financialstatement);
+            storedProcedureService.callUpdateCreditScore(financialstatement);
             return "redirect:/FinancialStatementEdit?year="+formData.get("year")+"&quarter="+formData.get("quarter");
         }else{
             return "something-wrong";
@@ -116,4 +121,3 @@ public class FinancialStatementEditController {
         }
     }
 }
-
