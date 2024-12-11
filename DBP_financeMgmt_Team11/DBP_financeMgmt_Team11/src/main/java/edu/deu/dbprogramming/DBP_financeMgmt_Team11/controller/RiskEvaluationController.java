@@ -4,6 +4,7 @@ import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Company;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.entity.Riskevaluation;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.repository.CompanyRepository;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.RiskEvaluationService;
+import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.StoredProcedureService;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.UserService;
 import edu.deu.dbprogramming.DBP_financeMgmt_Team11.service.UtilityCodeService;
 import jakarta.servlet.http.HttpSession;
@@ -26,11 +27,17 @@ public class RiskEvaluationController {
     private final RiskEvaluationService riskEvaluationService;
     private final CompanyRepository companyRepository;
     private UtilityCodeService utilityCodeService;
-
-    public RiskEvaluationController(RiskEvaluationService riskEvaluationService, CompanyRepository companyRepository, UtilityCodeService utilityCodeService) {
+    private final StoredProcedureService storedProcedureService;
+    
+    // 의존성 주입(생성자 주입)
+    public RiskEvaluationController(RiskEvaluationService riskEvaluationService,
+                                    CompanyRepository companyRepository,
+                                    UtilityCodeService utilityCodeService,
+                                    StoredProcedureService storedProcedureService) {
         this.riskEvaluationService = riskEvaluationService;
         this.companyRepository = companyRepository;
         this.utilityCodeService = utilityCodeService;
+        this.storedProcedureService = storedProcedureService;
     }
 
 
@@ -158,6 +165,7 @@ public class RiskEvaluationController {
             Riskevaluation result=riskEvaluationService.saveRiskEvaluation(riskEvaluation);
             model.addAttribute("status", "success");    //안씀
             model.addAttribute("risk", result); //안씀
+            storedProcedureService.callUpdateCreditScore(clientCode);
             return "redirect:/RiskEvaluation";
         }catch (Exception e){
             e.printStackTrace();

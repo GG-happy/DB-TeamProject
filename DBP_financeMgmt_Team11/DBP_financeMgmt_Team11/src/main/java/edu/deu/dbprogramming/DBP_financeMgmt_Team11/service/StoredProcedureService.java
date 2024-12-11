@@ -25,4 +25,15 @@ public class StoredProcedureService {
         // 실행
         query.execute();
     }
+
+    public void callUpdateCreditScore(String companyId) {
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("UpdateCreditScore");
+
+        // 입력 파라미터 등록
+        query.registerStoredProcedureParameter(1, String.class, jakarta.persistence.ParameterMode.IN);
+        query.setParameter(1, companyId);
+
+        // 실행
+        query.execute();
+    }
 }
