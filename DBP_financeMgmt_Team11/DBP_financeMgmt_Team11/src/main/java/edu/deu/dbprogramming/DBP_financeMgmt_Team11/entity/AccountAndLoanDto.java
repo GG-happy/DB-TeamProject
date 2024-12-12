@@ -73,6 +73,7 @@ public class AccountAndLoanDto {
     }
 
     public String getRepaymentPeriod() {
+        System.out.println("getRepaymentPeriod:"+ repaymentPeriod);
         return repaymentPeriod;
     }
 

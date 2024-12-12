@@ -68,7 +68,7 @@ public class AccountAndLoanDao {
                 TO_CHAR(a.open_date, 'YYYY-MM-DD') AS openDate,
                 l.loan_id AS loanId,
                 l.loan_amount AS loanAmount,
-                l.repayment_period AS repaymentPeriod,
+                TO_CHAR(l.repayment_period, 'YYYY-MM-DD') AS repaymentPeriod,
                 l.repayment_status AS repaymentStatus,
                 ir.applied_rate AS appliedRate
             FROM Account a
@@ -141,7 +141,7 @@ public class AccountAndLoanDao {
     UPDATE Loan
     SET 
         loan_amount = ?, 
-        repayment_period = ?, 
+        repayment_period = TO_DATE(?, 'YYYY-MM-DD'), 
         repayment_status = ?
     WHERE loan_id = ? 
     AND account_id = ? 
